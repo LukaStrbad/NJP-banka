@@ -1,0 +1,18 @@
+<form>
+  <label for="firstName">First name:</label>
+  <input type="text" name="firstName" id="firstName" [(ngModel)]="user.firstName">
+
+  <label for="firstName">Last name:</label>
+  <input type="text" name="lastName" id="lastName" [(ngModel)]="user.lastName">
+
+  <label for="firstName">Email:</label>
+  <input type="email" name="email" id="email" [(ngModel)]="user.email">
+
+  <label for="firstName">Date of birth:</label>
+  <input type="date" name="dob" id="dob" [(ngModel)]="user.dateOfBirth">
+
+  <label for="password">Password</label>
+  <input type="password" name="password" id="password" [(ngModel)]="pass">
+</form>
+
+<button (click)="register()">Register</button>

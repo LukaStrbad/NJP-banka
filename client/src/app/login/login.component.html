@@ -1,0 +1,17 @@
+<form style="padding: 8pt;">
+  <div class="input-group">
+    <label for="email" class="input-group-addon">E-mail: </label>
+    <input type="email" name="email" id="email" [(ngModel)]="email">
+  </div>
+
+  <div class="input-group">
+    <label for="password">Password: </label>
+    <input type="password" name="password" id="password" [(ngModel)]="password">
+  </div>
+
+  <button (click)="login()" class="btn btn-primary">Login</button>
+</form>
+
+<div *ngIf="message != ''">
+  Error: {{message}}
+</div>

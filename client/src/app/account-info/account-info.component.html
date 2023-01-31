@@ -1,0 +1,7 @@
+<div class="card">
+  <div class="card-body">
+    <h6 class="card-title">IBAN: {{account.iban}}</h6>
+    <h5 class="card-text">Balance: {{account.balance}} {{account.currency}}</h5>
+    <button class="btn btn-primary" [routerLink]="'/main/atm/' + account.iban">ATM</button>
+  </div>
+</div>
