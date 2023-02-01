@@ -1,0 +1,24 @@
+<form>
+    <div class="mb-3">
+        <label for="sener" class="form-label">Sending IBAN</label>
+        <select id="sender" class="form-select" (change)="senderChanged($event.target)">
+            <option *ngFor="let account of accounts" value="{{account.iban}}">{{account.iban}} ({{account.balance}} {{account.currency}})</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="account" class="form-label">Receiving IBAN</label>
+        <input type="text" name="account" id="account" class="form-control">
+        <div class="form-text">IBAN of the receiving account</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="amount">Amount</label>
+        <div class="input-group">
+            <input type="number" name="amount" id="amount" class="form-control" value="0">
+            <span class="input-group-text">{{currentAccount?.currency}}</span>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="currentAccount?.balance === 0">Send</button>
+</form>

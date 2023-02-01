@@ -1,7 +1,4 @@
 import {Component} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {User} from "./model/user";
-import {Transaction} from "./model/transaction";
 
 @Component({
   selector: 'app-root',

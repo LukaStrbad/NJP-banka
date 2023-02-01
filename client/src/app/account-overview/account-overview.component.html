@@ -1,0 +1,23 @@
+<div class="container">
+    <div *ngIf="accountInfo === null">
+        Loading...
+    </div>
+    <div *ngIf="accountInfo !== null">
+        <h3>IBAN: {{accountInfo.iban}}</h3>
+        <h4>Balance: {{accountInfo.balance}} {{accountInfo.currency}}</h4>
+        <div class="row">
+            <div class="col-6">
+                <h5>Ingoing transactions</h5>
+                <div *ngFor="let ingoing of accountInfo.ingoingTransactions">
+                    {{ingoing.amount}} {{ingoing.sendingCurrency}}
+                </div>
+            </div>
+            <div class="col-6">
+                <h5>Outgoing transactions</h5>
+                <div *ngFor="let outgoing of accountInfo.outgoingTransactions">
+                    {{outgoing.amount}} {{accountInfo.currency}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

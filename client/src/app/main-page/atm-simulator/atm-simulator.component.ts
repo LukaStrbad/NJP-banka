@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {switchMap} from "rxjs";
-import {Account} from "../model/account";
+import {Account} from "../../model/account";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {AuthService} from "../services/auth.service";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-atm-simulator',

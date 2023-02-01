@@ -1,3 +1,5 @@
+import { ReceivingTransaction, SendingTransaction } from "./transaction"
+
 export class Account {
   constructor(
     public iban: string,
@@ -6,4 +8,12 @@ export class Account {
     public currency: string,
   ) {
   }
+}
+
+export interface AccountInfo {
+  balance: number,
+  currency: string,
+  iban: string,
+  ingoingTransactions: ReceivingTransaction[],
+  outgoingTransactions: SendingTransaction[],
 }

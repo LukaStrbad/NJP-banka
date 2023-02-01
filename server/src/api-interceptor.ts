@@ -24,7 +24,6 @@ export function apiInterceptor(
 
     if (token) {
         let [error, decoded] = verifyToken(token);
-        console.log(decoded);
         if (error) {
             return res.status(403).send(<ApiResponse> {
                 success: false,

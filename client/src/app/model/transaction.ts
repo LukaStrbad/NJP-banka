@@ -1,10 +1,14 @@
-export class Transaction {
-  constructor(
-    public id: number,
-    public senderIBAN: string,
-    public receiverIBAN: string,
-    public exchangeRate: number | null,
-    public timestamp: Date
-  ) {
-  }
+export interface Transaction {
+  iban: string,
+  amount: number,
+  exchangeRate: number,
+  time_stamp: string
+}
+
+export interface ReceivingTransaction extends Transaction {
+  sendingCurrency: string
+}
+
+export interface SendingTransaction extends Transaction {
+  receivingCurrency: string
 }

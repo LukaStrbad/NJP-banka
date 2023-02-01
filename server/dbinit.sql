@@ -29,8 +29,10 @@ CREATE TABLE accounts
 CREATE TABLE transactions
 (
     id           INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    amount       DECIMAL(15, 2)  NOT NULL,
     senderIBAN   CHAR(21)        NOT NULL,
     receiverIBAN CHAR(21)        NOT NULL,
+    receivingCurrency CHAR(3)    NOT NULL,
     exchangeRate DOUBLE                   DEFAULT 1.0,
     time_stamp   TIMESTAMP       NOT NULL DEFAULT NOW(),
     FOREIGN KEY (senderIBAN) REFERENCES accounts (iban),

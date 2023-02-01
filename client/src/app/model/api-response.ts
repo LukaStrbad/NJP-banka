@@ -3,6 +3,7 @@ export interface ApiResponse {
   status: number | string,
   token?: string,
   userInfo?: UserTokenInfo,
+  value?: any,
   description: string
 }
 
