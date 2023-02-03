@@ -30,6 +30,6 @@ import { getAuthRouter } from "./routes/auth";
     app.use("/transactions", getTransactionsRouter(pool));
 
     const server = app.listen(8081, () => {
-        console.log("Listening on port 8081");
+        console.log("Listening on http://localhost:8081/");
     });
 })();

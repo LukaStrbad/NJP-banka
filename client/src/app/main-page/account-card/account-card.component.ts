@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Account } from 'src/app/model/account';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-account-card',
@@ -8,4 +9,10 @@ import { Account } from 'src/app/model/account';
 })
 export class AccountCardComponent {
   @Input() account!: Account
+
+  constructor(private clipboard: Clipboard) { }
+
+  copyIbanToClipboard() {
+    this.clipboard.copy(this.account.iban);
+  }
 }

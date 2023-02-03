@@ -93,7 +93,7 @@ export function getAuthRouter(pool: mysql.Pool) {
                     isAdmin: false
                 }
 
-                let insert = await conn.query("INSERT INTO users SET?;", user);
+                let insert = await conn.query("INSERT INTO users SET ?;", user);
 
                 let userId = insert.insertId;
 

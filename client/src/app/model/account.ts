@@ -17,3 +17,9 @@ export interface AccountInfo {
   ingoingTransactions: ReceivingTransaction[],
   outgoingTransactions: SendingTransaction[],
 }
+
+export interface BasicAccountInfo {
+  iban: string,
+  currency: string,
+  owner: string
+}
