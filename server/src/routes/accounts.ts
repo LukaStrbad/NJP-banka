@@ -160,16 +160,18 @@ export function getAccountsRouter(pool: mysql.Pool) {
                 }
 
                 let account = accounts[0];
-                let sendingPayments = await conn.query(`SELECT IF(receiverIBAN = '${BANK_IBAN}', 'ATM', receiverIBAN) AS iban, 
-                                                        exchangeRate, amount, time_stamp, receivingCurrency
-                                                        FROM transactions WHERE senderIBAN = ?;`, iban);
+                let sendingTransactions = await conn.query(
+                `SELECT IFNULL(receiverIban, 'ATM') as iban, amount, exchangeRate,
+                        time_stamp, receivingCurrency FROM sendTransactions
+                        WHERE iban = ?;`, iban);
 
-                let receivingPayments = await conn.query(`SELECT IF(senderIBAN = '${BANK_IBAN}', 'ATM', senderIBAN) AS iban, 
-                                                        exchangeRate, amount, time_stamp, receivingCurrency AS sendingCurrency
-                                                        FROM transactions WHERE receiverIBAN = ?;`, iban);
+                let receivingTransactions = await conn.query(
+                    `SELECT IFNULL(senderIban, 'ATM') as iban, amount, time_stamp
+                    FROM receiveTransactions
+                    WHERE iban = ?;`, iban);
 
-                account.outgoingTransactions = sendingPayments;
-                account.ingoingTransactions = receivingPayments;
+                account.sendingTransactions = sendingTransactions;
+                account.receivingTransactions = receivingTransactions;
 
                 res.json(<ApiResponse>{
                     success: true,

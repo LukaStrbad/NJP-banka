@@ -14,8 +14,8 @@ export interface AccountInfo {
   balance: number,
   currency: string,
   iban: string,
-  ingoingTransactions: ReceivingTransaction[],
-  outgoingTransactions: SendingTransaction[],
+  sendingTransactions: SendingTransaction[],
+  receivingTransactions: ReceivingTransaction[],
 }
 
 export interface BasicAccountInfo {

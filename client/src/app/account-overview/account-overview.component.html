@@ -4,18 +4,36 @@
     </div>
     <div *ngIf="accountInfo !== null">
         <h3>IBAN: {{accountInfo.iban}}</h3>
-        <h4>Balance: {{accountInfo.balance}} {{accountInfo.currency}}</h4>
+        <h4>Balance: {{accountInfo.balance | currency:accountInfo.currency}} {{accountInfo.currency}}</h4>
         <div class="row">
             <div class="col-6">
-                <h5>Ingoing transactions</h5>
-                <div *ngFor="let ingoing of accountInfo.ingoingTransactions">
-                    {{ingoing.amount}} {{ingoing.sendingCurrency}}
+                <h5>Received</h5>
+                <div *ngFor="let receiving of accountInfo.receivingTransactions" class="card mt-2">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{receiving.amount | currency:accountInfo.currency}}
+                        </h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{receiving.time_stamp | date:"dd.MM.yyyy. HH:mm"}}</h6>
+                        <p class="card-text" *ngIf="receiving.iban">
+                            Money received from {{receiving.iban}}
+                        </p>
+                        <p class="card-text" *ngIf="!receiving.iban">
+                            Money deposited at an ATM
+                        </p>
+                    </div>
                 </div>
             </div>
             <div class="col-6">
-                <h5>Outgoing transactions</h5>
-                <div *ngFor="let outgoing of accountInfo.outgoingTransactions">
-                    {{outgoing.amount}} {{accountInfo.currency}}
+                <h5>Sent</h5>
+                <div *ngFor="let sending of accountInfo.sendingTransactions" class="card mt-2">
+                    <div class="card-body">
+                        <h5 class="card-title">{{sending.amount | currency:accountInfo.currency}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{sending.time_stamp | date:"dd.MM.yyyy. HH:mm"}}</h6>
+                        <p class="card-text" *ngIf="sending.iban">
+                            Sent <b>{{sending.amount * sending.exchangeRate | currency:sending.receivingCurrency}}</b> to {{sending.iban}}
+                            <span *ngIf="accountInfo.currency != sending.receivingCurrency">at exchange rate of {{sending.exchangeRate}}</span>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
