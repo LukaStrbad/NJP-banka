@@ -57,7 +57,7 @@ export function getAuthRouter(pool: mysql.Pool) {
             let conn = await pool.getConnection();
             try {
                 let email = req.body.email;
-                let firstName = req.body.name;
+                let firstName = req.body.firstName;
                 let lastName = req.body.lastName;
                 let dateOfBirth = req.body.dateOfBirth;
                 let password = md5(req.body.password);
@@ -70,7 +70,21 @@ export function getAuthRouter(pool: mysql.Pool) {
                     return res.json(<ApiResponse>{
                         success: false,
                         status: 100,
-                        description: "Email, first and last name, date of birth password must be provided."
+                        description: "Email, first name, last name, date of birth and password must be provided."
+                    });
+                }
+
+                let dobFormatted = (dateOfBirth as string).split("T")[0];
+                let today = new Date();
+                let years18 = new Date(today.getFullYear() - 18, today.getMonth(), today.getDay())
+                    .toISOString().split("T")[0];
+
+                // If user is younger than 18
+                if (dobFormatted > years18) {
+                    return res.json(<ApiResponse>{
+                        success: false,
+                        status: 100,
+                        description: "User is less than 18 years old"
                     });
                 }
 
@@ -99,7 +113,7 @@ export function getAuthRouter(pool: mysql.Pool) {
 
                 let newUser = await conn.query<UserTokenInfo[]>("SELECT email, firstName, lastName, isAdmin FROM users WHERE id = ?;", userId);
 
-                res.json(<ApiResponse> {
+                res.json(<ApiResponse>{
                     success: true,
                     status: 200,
                     token: generateSignedToken(newUser[0]),

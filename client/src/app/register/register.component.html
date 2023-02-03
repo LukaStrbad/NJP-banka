@@ -1,18 +1,68 @@
-<form>
-  <label for="firstName">First name:</label>
-  <input type="text" name="firstName" id="firstName" [(ngModel)]="user.firstName">
+<div class="container align-self-center">
+  <div class="alert alert-danger mb-3" *ngIf="error">
+    {{error}}
+  </div>
 
-  <label for="firstName">Last name:</label>
-  <input type="text" name="lastName" id="lastName" [(ngModel)]="user.lastName">
+  <form #registerForm="ngForm">
+    <div class="mb-3">
+      <label class="form-label" for="email">E-mail</label>
+      <input class="form-control" type="email" name="email" id="email" [(ngModel)]="value.email" email required
+        #email="ngModel">
+      <div class="alert alert-danger" [hidden]="email.valid || email.pristine">
+        Enter a valid e-mail
+      </div>
+    </div>
 
-  <label for="firstName">Email:</label>
-  <input type="email" name="email" id="email" [(ngModel)]="user.email">
+    <div class="mb-3">
+      <label class="form-label" for="firstName">First name</label>
+      <input class="form-control" type="text" name="firstName" id="firstName" [(ngModel)]="value.firstName" required
+        #firstName="ngModel">
+      <div class="alert alert-danger" [hidden]="firstName.valid || firstName.pristine">
+        Enter your first name
+      </div>
+    </div>
 
-  <label for="firstName">Date of birth:</label>
-  <input type="date" name="dob" id="dob" [(ngModel)]="user.dateOfBirth">
+    <div class="mb-3">
+      <label class="form-label" for="lastName">Last name</label>
+      <input class="form-control" type="text" name="lastName" id="lastName" [(ngModel)]="value.lastName" required
+        #lastName="ngModel">
+      <div class="alert alert-danger" [hidden]="lastName.valid || lastName.pristine">
+        Enter your last name
+      </div>
+    </div>
 
-  <label for="password">Password</label>
-  <input type="password" name="password" id="password" [(ngModel)]="pass">
-</form>
+    <div class="mb-3">
+      <label class="form-label" for="dob">Date of birth</label>
+      <input class="form-control" type="date" name="dob" id="dob" [(ngModel)]="value.dateOfBirth" required
+        #dob="ngModel">
+      <div class="alert alert-danger" [hidden]="dob.valid || dob.pristine">
+        Enter your date of birth
+      </div>
+    </div>
 
-<button (click)="register()">Register</button>
+    <div class="mb-3">
+      <label class="form-label" for="password">Password</label>
+      <input class="form-control" type="password" name="password" id="password" [(ngModel)]="value.password"
+        minlength="8" required #password="ngModel">
+      <div class="alert alert-danger" [hidden]="password.valid || password.pristine">
+        Password must have at least 8 characters
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="password-confirm">Confirm password</label>
+      <input class="form-control" type="password" name="password-confirm" id="password-confirm" minlength="8"
+        [(ngModel)]="passConfirm" required #passwordConfirm="ngModel">
+      <div class="alert alert-danger" [hidden]="password.value == passwordConfirm.value || passwordConfirm.pristine">
+        Passwords must match
+      </div>
+    </div>
+
+    <div class="mb-3 d-flex justify-content-center">
+      <button class="btn btn-primary" type="submit" (click)="register()"
+        [disabled]="!registerForm.form.valid">Register</button>
+    </div>
+  </form>
+
+
+</div>

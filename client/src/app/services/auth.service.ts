@@ -1,7 +1,7 @@
 import { User } from "../model/user";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Subject } from "rxjs";
+import { lastValueFrom, Subject } from "rxjs";
 import { ApiResponse } from "../model/api-response";
 import { environment } from "src/environments/environment";
 
@@ -42,27 +42,35 @@ export class AuthService {
     this.authChange.next(false);
   }
 
-  login(email: string, password: string) {
-    return this.httpClient
-      .post<ApiResponse>(`${this.apiUrl}/login`, { email: email, password: password })
-      .subscribe(res => {
-        if (res.success) {
-          console.log(res.token);
-          sessionStorage.setItem("user", JSON.stringify(res.userInfo));
-          sessionStorage.setItem("token", res.token ?? "");
-          this.authChange.next(true);
-        } else {
-          this.authChange.next(false);
-          this.errorEmitter.next(res.description);
-        }
-      });
+  handleLoginRegister(res: ApiResponse) {
+    if (res.success) {
+      sessionStorage.setItem("user", JSON.stringify(res.userInfo));
+      sessionStorage.setItem("token", res.token ?? "");
+      this.authChange.next(true);
+    } else {
+      this.authChange.next(false);
+      this.errorEmitter.next(res.description);
+    }
   }
 
-  register(user: User, pass: string) {
-    return this.httpClient
-      .post(`${this.apiUrl}/register`, {
-        ...user,
-        password: pass
-      });
+  async login(email: string, password: string) {
+    let res = await lastValueFrom(this.httpClient
+      .post<ApiResponse>(`${this.apiUrl}/login`, { email: email, password: password }));
+
+    this.handleLoginRegister(res);
+  }
+
+  async register(value: {
+    email: string,
+    firstName: string,
+    lastName: string,
+    dateOfBirth: Date,
+    password: string
+  }) {
+    let res = await lastValueFrom(this.httpClient
+      .post<ApiResponse>(`${this.apiUrl}/register`, value)
+    );
+
+    this.handleLoginRegister(res);
   }
 }

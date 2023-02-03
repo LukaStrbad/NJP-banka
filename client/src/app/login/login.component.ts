@@ -1,13 +1,13 @@
-import {Component} from '@angular/core';
-import {AuthService} from "../services/auth.service";
-import {Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from "../services/auth.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   email = "";
   password = "";
   message = "";
@@ -16,13 +16,16 @@ export class LoginComponent {
     private authService: AuthService,
     private router: Router
   ) {
-    authService.authChange.subscribe(loggedIn => {
+  }
+
+  ngOnInit(): void {
+    this.authService.authChange.subscribe(loggedIn => {
       if (loggedIn) {
-        router.navigateByUrl("main").then(() => {
+        this.router.navigateByUrl("main").then(() => {
         });
       }
     });
-    authService.errorEmitter.subscribe(msg => this.message = msg);
+    this.authService.errorEmitter.subscribe(msg => this.message = msg);
   }
 
   login() {
