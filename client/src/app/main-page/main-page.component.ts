@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { AuthService } from "../services/auth.service";
-import { Router } from "@angular/router";
+import { NavigationStart, Router } from "@angular/router";
 import { User } from "../model/user";
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-main-page',
@@ -10,6 +11,7 @@ import { User } from "../model/user";
 })
 export class MainPageComponent {
   user!: User
+  currentRoute = "/main/overview";
 
   constructor(
     public authService: AuthService,
@@ -22,5 +24,14 @@ export class MainPageComponent {
       }
     })
     this.user = authService.getUser()!;
+
+    this.currentRoute = router.url;
+
+    router.events
+      .pipe(filter(event => event instanceof NavigationStart))
+      .subscribe(val => {
+        let navStart = val as NavigationStart;
+        this.currentRoute = navStart.url;
+      });
   }
 }
