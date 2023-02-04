@@ -4,36 +4,41 @@
     </div>
     <div *ngIf="accountInfo !== null">
         <h3>IBAN: {{accountInfo.iban}}</h3>
-        <h4>Balance: {{accountInfo.balance | currency:accountInfo.currency}} {{accountInfo.currency}}</h4>
-        <div class="row">
+        <h4>Balance: {{accountInfo.balance | currency:accountInfo.currency}}</h4>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="singleListSwitch" [checked]="singleList"
+                (change)="changeSingleList()">
+            <label for="singleListSwitch">Display as a single list</label>
+        </div>
+        <!-- Display as a single list -->
+        <div *ngIf="singleList" class="row">
+            <div *ngFor="let transaction of (accountInfo.receivingTransactions | joinTransactions:accountInfo.sendingTransactions) | orderBy:false:'transaction':'time_stamp'"
+                class="col-xl-3 col-lg-4 col-md-6 col-12">
+                <app-received-card *ngIf="transaction.type == 'receiving'" [receiving]="transaction.transaction"
+                    [currentCurrency]="accountInfo.currency">
+                </app-received-card>
+                <app-sent-card *ngIf="transaction.type == 'sending'" [sending]="$any(transaction.transaction)"
+                    [currentCurrency]="accountInfo.currency"></app-sent-card>
+            </div>
+        </div>
+
+        <!-- Display as 2 lists -->
+        <div *ngIf="!singleList" class="row">
             <div class="col-6">
                 <h5>Received</h5>
-                <div *ngFor="let receiving of accountInfo.receivingTransactions" class="card mt-2">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            {{receiving.amount | currency:accountInfo.currency}}
-                        </h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{receiving.time_stamp | date:"dd.MM.yyyy. HH:mm"}}</h6>
-                        <p class="card-text" *ngIf="receiving.iban">
-                            Money received from {{receiving.iban}}
-                        </p>
-                        <p class="card-text" *ngIf="!receiving.iban">
-                            Money deposited at an ATM
-                        </p>
-                    </div>
+                <div class="row">
+                    <app-received-card
+                        *ngFor="let receiving of accountInfo.receivingTransactions | orderBy:false:'time_stamp'"
+                        [receiving]="receiving" [currentCurrency]="accountInfo.currency"
+                        class="col-xl-6 col-12"></app-received-card>
                 </div>
             </div>
             <div class="col-6">
-                <h5>Sent</h5>
-                <div *ngFor="let sending of accountInfo.sendingTransactions" class="card mt-2">
-                    <div class="card-body">
-                        <h5 class="card-title">{{sending.amount | currency:accountInfo.currency}}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{sending.time_stamp | date:"dd.MM.yyyy. HH:mm"}}</h6>
-                        <p class="card-text" *ngIf="sending.iban">
-                            Sent <b>{{sending.amount * sending.exchangeRate | currency:sending.receivingCurrency}}</b> to {{sending.iban}}
-                            <span *ngIf="accountInfo.currency != sending.receivingCurrency">at exchange rate of {{sending.exchangeRate}}</span>
-                        </p>
-                    </div>
+                <div class="row">
+                    <h5>Sent</h5>
+                    <app-sent-card *ngFor="let sending of accountInfo.sendingTransactions | orderBy:false:'time_stamp'"
+                        [sending]="sending" [currentCurrency]="accountInfo.currency"
+                        class="col-xl-6 col-12"></app-sent-card>
                 </div>
             </div>
         </div>

@@ -1,0 +1,15 @@
+<div class="card mt-2">
+    <h5 class="card-header text-bg-success">
+        {{receiving.amount | currency:currentCurrency}}
+    </h5>
+    <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">{{receiving.time_stamp | date:"dd.MM.yyyy. HH:mm"}}
+        </h6>
+        <p class="card-text" *ngIf="receiving.iban">
+            Money received from {{receiving.iban}}
+        </p>
+        <p class="card-text" *ngIf="!receiving.iban">
+            Money deposited at an ATM
+        </p>
+    </div>
+</div>
