@@ -19,7 +19,7 @@ const SAVE_PATH = SAVE_DIR + "/tecaj.json";
 export async function getTecaj(): Promise<Tecaj[]> {
     try {
         let data = await fs.stat(SAVE_PATH);
-        let fileDate = data.birthtime.toISOString().split("T")[0];
+        let fileDate = data.mtime.toISOString().split("T")[0];
         let today = new Date().toISOString().split("T")[0];
         // If saved file is up to date return this
         if (fileDate == today) {
