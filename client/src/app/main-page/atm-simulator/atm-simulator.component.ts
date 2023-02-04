@@ -1,41 +1,36 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {switchMap} from "rxjs";
-import {Account} from "../../model/account";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {AuthService} from "../../services/auth.service";
-
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from "@angular/router";
+import { Account } from "../../model/account";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { AuthService } from "../../services/auth.service";
+import { AccountsService } from 'src/app/services/accounts.service';
 @Component({
   selector: 'app-atm-simulator',
   templateUrl: './atm-simulator.component.html',
   styleUrls: ['./atm-simulator.component.css']
 })
 export class AtmSimulatorComponent implements OnInit {
-  account: Account | null = null
-
-  private getTokenHeader() {
-    return new HttpHeaders({"token": this.loginService.getToken() ?? ""});
-  }
+  account: Account | null = null;
+  accounts: Account[] = [];
 
   constructor(
     private route: ActivatedRoute,
-    private httpClient: HttpClient,
-    private loginService: AuthService
+    private accountsService: AccountsService
   ) {
   }
-
+  
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      let iban = params["iban"];
+    this.init();
+  }
+  
+  async init() {
+    this.accounts = await this.accountsService.getAllAccounts();
 
-      this.httpClient.get(`/api/accounts/${iban}`, {headers: this.getTokenHeader()})
-        .subscribe((res: any) => {
-          console.log(res);
-          if (res.success) {
-            this.account = res.value;
-          }
-        })
-    });
+    let iban = this.route.snapshot.params["iban"];
+    let account = this.accounts.find(a => a.iban === iban);
+    if (account) {
+      this.account = account;
+    }
   }
 }
 

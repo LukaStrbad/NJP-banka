@@ -1,3 +1,17 @@
-<div *ngIf="account !== null" class="container-fluid justify-content-center d-flex">
-  <h3>Balance: {{account.balance}} {{account.currency}}</h3>
+<div *ngIf="account === null" class="card">
+  <h3 class="card-header text-bg-secondary">
+    Choose an account
+  </h3>
+  <div class="card-body row justify-content-center g-3">
+    <button *ngFor="let a of accounts" class="btn btn-outline-secondary col-8" (click)="account = a"
+      [routerLink]="a.iban">{{a.iban}}</button>
+  </div>
+</div>
+
+<div *ngIf="account !== null" class="card">
+  <h3 class="card-header text-bg-secondary">Account {{account.iban}}</h3>
+  <router-outlet></router-outlet>
+  <div class="card-footer">
+    <button class="btn btn-secondary" (click)="account = null" routerLink="/main/atm">Exit</button>
+  </div>
 </div>
