@@ -19,16 +19,14 @@ export function getAtmRouter(pool: mysql.Pool) {
                 if (accountBalance.length === 0) {
                     return res.json(<ApiResponse>{
                         success: false,
-                        status: 100,
-                        description: `Account with IBAN ${iban} doesn't exist for current user`
+                        description: `Račun sa IBAN-om ${iban} ne postoji za trenutnog korisnika`
                     });
                 }
 
                 if (amount > accountBalance[0].balance) {
                     return res.json(<ApiResponse>{
                         success: false,
-                        status: 100,
-                        description: "You don't have enough funds"
+                        description: "Nemate dovoljno sredstava"
                     });
                 }
 
@@ -42,14 +40,12 @@ export function getAtmRouter(pool: mysql.Pool) {
                 if (queryResult.affectedRows === 0) {
                     return res.json(<ApiResponse>{
                         success: false,
-                        status: 100,
-                        description: "Unknown error occured"
+                        description: "Nepoznata greška"
                     });
                 } else {
                     return res.json(<ApiResponse>{
                         success: true,
-                        status: 200,
-                        description: `Successfully withdrawn ${amount} ${accountBalance[0].currency}`
+                        description: `Uspješno isplaćeno ${amount} ${accountBalance[0].currency}`
                     });
                 }
             }
@@ -73,8 +69,7 @@ export function getAtmRouter(pool: mysql.Pool) {
                 if (accountBalance.length === 0) {
                     return res.json(<ApiResponse>{
                         success: false,
-                        status: 100,
-                        description: `Account with IBAN ${iban} doesn't exist for current user`
+                        description: `Račun sa IBAN-om ${iban} ne postoji za trenutnog korisnika`
                     });
                 }
 
@@ -88,14 +83,12 @@ export function getAtmRouter(pool: mysql.Pool) {
                 if (queryResult.affectedRows === 0) {
                     return res.json(<ApiResponse>{
                         success: false,
-                        status: 100,
-                        description: "Unknown error occured"
+                        description: "Nepoznata greška"
                     });
                 } else {
                     return res.json(<ApiResponse>{
                         success: true,
-                        status: 200,
-                        description: `Successfully deposited ${amount} ${accountBalance[0].currency}`
+                        description: `Uspješno uplaćeno ${amount} ${accountBalance[0].currency}`
                     });
                 }
             }

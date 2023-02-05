@@ -5,11 +5,11 @@
     <div class="card-body">
         <h6 class="card-subtitle mb-2 text-muted">{{receiving.time_stamp | date:"dd.MM.yyyy. HH:mm"}}
         </h6>
-        <p class="card-text" *ngIf="receiving.iban">
-            Money received from {{receiving.iban}}
+        <p class="card-text" *ngIf="receiving.iban !== 'ATM'">
+            Novac uplaćen sa računa {{receiving.iban}}
         </p>
-        <p class="card-text" *ngIf="!receiving.iban">
-            Money deposited at an ATM
+        <p class="card-text" *ngIf="receiving.iban === 'ATM'">
+            Novac uplaćen na bankomatu
         </p>
     </div>
 </div>

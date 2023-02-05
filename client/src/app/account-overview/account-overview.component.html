@@ -1,15 +1,16 @@
 <div class="container">
     <div *ngIf="accountInfo === null">
-        Loading...
+        Učitavanje...
     </div>
     <div *ngIf="accountInfo !== null">
         <h3>IBAN: {{accountInfo.iban}}</h3>
-        <h4>Balance: {{accountInfo.balance | currency:accountInfo.currency}}</h4>
+        <h4>Iznos: {{accountInfo.balance | currency:accountInfo.currency}}</h4>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="singleListSwitch" [checked]="singleList"
                 (change)="changeSingleList()">
-            <label for="singleListSwitch">Display as a single list</label>
+            <label for="singleListSwitch">Prikaži u jednom retku</label>
         </div>
+
         <!-- Display as a single list -->
         <div *ngIf="singleList" class="row">
             <div *ngFor="let transaction of (accountInfo.receivingTransactions | joinTransactions:accountInfo.sendingTransactions) | orderBy:false:'transaction':'time_stamp'"
@@ -25,7 +26,7 @@
         <!-- Display as 2 lists -->
         <div *ngIf="!singleList" class="row">
             <div class="col-6">
-                <h5>Received</h5>
+                <h5>Uplate</h5>
                 <div class="row">
                     <app-received-card
                         *ngFor="let receiving of accountInfo.receivingTransactions | orderBy:false:'time_stamp'"
@@ -35,7 +36,7 @@
             </div>
             <div class="col-6">
                 <div class="row">
-                    <h5>Sent</h5>
+                    <h5>Isplate</h5>
                     <app-sent-card *ngFor="let sending of accountInfo.sendingTransactions | orderBy:false:'time_stamp'"
                         [sending]="sending" [currentCurrency]="accountInfo.currency"
                         class="col-xl-6 col-12"></app-sent-card>

@@ -4,12 +4,17 @@
     </h5>
     <div class="card-body">
         <h6 class="card-subtitle mb-2 text-muted">{{sending.time_stamp | date:"dd.MM.yyyy. HH:mm"}}</h6>
-        <p class="card-text" *ngIf="sending.iban">
-            Sent <b>{{sending.amount * sending.exchangeRate | currency:sending.receivingCurrency}}</b>
-            to {{sending.iban}}
-            <span *ngIf="currentCurrency != sending.receivingCurrency">at exchange rate of
+
+        <p class="card-text" *ngIf="sending.iban !== 'ATM'">
+            Uplaćeno <b>{{sending.amount * sending.exchangeRate | currency:sending.receivingCurrency}}</b>
+            na račun {{sending.iban}}
+            <span *ngIf="currentCurrency != sending.receivingCurrency">po tečaju od
                 {{1 | currency:currentCurrency}} = {{sending.exchangeRate |
                 currency:sending.receivingCurrency:"symbol":"1.5-5"}}</span>
         </p>
+
+        <div class="card-text" *ngIf="sending.iban === 'ATM'">
+            Novac je isplaćen na bankomatu
+        </div>
     </div>
 </div>

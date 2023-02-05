@@ -1,6 +1,5 @@
 import { getAccountsRouter } from "./routes/accounts";
 import express from "express";
-import { getTransactionsRouter } from "./routes/transactions";
 import mysql from "promise-mysql";
 import { config } from "./config";
 import { getAuthRouter } from "./routes/auth";
@@ -28,7 +27,6 @@ import { getAtmRouter } from "./routes/atm";
 
     app.use("/auth", getAuthRouter(pool));
     app.use("/accounts", getAccountsRouter(pool));
-    app.use("/transactions", getTransactionsRouter(pool));
     app.use("/atm", getAtmRouter(pool));
 
     const server = app.listen(8081, () => {

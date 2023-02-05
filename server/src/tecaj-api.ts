@@ -28,7 +28,6 @@ export async function getTecaj(): Promise<Tecaj[]> {
         }
     }
     catch (e) {
-        console.log("File doesn't exist, creating a new one.");
     }
     let response = await axios.get(TECAJ_URL);
     let tecajArr = response.data as Tecaj[];

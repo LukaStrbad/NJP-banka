@@ -1,6 +1,5 @@
 export interface ApiResponse {
   success: boolean,
-  status: number | string,
   token?: string,
   userInfo?: UserTokenInfo,
   value?: any,

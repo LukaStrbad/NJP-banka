@@ -1,27 +1,27 @@
 <form #paymentForm="ngForm" (ngSubmit)="onSend()" [hidden]="submitted" class="mt-2">
     <div class="mb-3">
-        <label for="sener" class="form-label">Sending IBAN</label>
+        <label for="sener" class="form-label">Račun za isplatu</label>
         <select id="sender" class="form-select" (change)="senderChanged($event.target)">
-            <option *ngFor="let account of accounts" [value]="account.iban">{{account.iban}} ({{account.balance}}
-                {{account.currency}})</option>
+            <option *ngFor="let account of accounts" [value]="account.iban">{{account.iban}} ({{account.balance |
+                currency:account.currency}})</option>
         </select>
     </div>
 
     <div class="mb-3">
-        <label for="account" class="form-label">Receiving IBAN</label>
+        <label for="account" class="form-label">Račun za uplatu</label>
         <input type="text" name="account" id="account" #account="ngModel" class="form-control" required
             [(ngModel)]="receivingIban" (change)="receiverChanged()">
-        <div class="form-text">IBAN of the receiving account</div>
-        <div class="alert alert-danger" [hidden]="receivingAccount === undefined || receivingAccount !== null">Account
-            doesn't exist
+        <div class="form-text">IBAN računa za uplatu</div>
+        <div class="alert alert-danger" [hidden]="receivingAccount === undefined || receivingAccount !== null">
+            Račun ne postoji
         </div>
         <div class="alert alert-info" *ngIf="receivingAccount">
-            Money will be sent to {{receivingAccount.owner}} in currency {{receivingAccount.currency}}
+            Novac će biti uplaćen na račun vlasnika {{receivingAccount.owner}} u valuti {{receivingAccount.currency}}
         </div>
     </div>
 
     <div class="mb-3">
-        <label for="amount">Amount</label>
+        <label for="amount">Iznos</label>
         <div class="input-group">
             <input type="number" name="amount" id="amount" class="form-control" value="0" [(ngModel)]="amount" min="0"
                 [max]="currentAccount?.balance ?? 0">
@@ -31,13 +31,13 @@
 
     <div class="mb-3 d-flex justify-content-center">
         <button type="submit" class="btn btn-primary"
-            [disabled]="!(paymentForm.form.valid && receivingAccount)">Send</button>
+            [disabled]="!(paymentForm.form.valid && receivingAccount)">Uplati</button>
     </div>
 </form>
 
 <div [hidden]="!submitted" class="mt-2">
     <div class="alert alert-success">
-        Money transfered successfully
+        Novac uspješno uplaćen
     </div>
-    <button class="btn btn-primary" (click)="reload()">Return to payment</button>
+    <button class="btn btn-primary" (click)="reload()">Povratak na uplatu</button>
 </div>
