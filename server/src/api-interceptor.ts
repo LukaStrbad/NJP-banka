@@ -27,8 +27,7 @@ export function apiInterceptor(
         if (error) {
             return res.status(401).send(<ApiResponse> {
                 success: false,
-                status: 401,
-                description: "Wrong token"
+                description: "Krivi token"
             });
         }
         req["decoded"] = decoded;
@@ -36,8 +35,7 @@ export function apiInterceptor(
     } else {
         return res.status(401).send(<ApiResponse>{
             success: false,
-            status: 401,
-            description: "No token provided"
+            description: "Token nije poslan"
         });
     }
 }

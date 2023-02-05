@@ -1,4 +1,5 @@
 import express, { query } from "express";
+import { resolve } from "node:path";
 import mysql from "promise-mysql";
 import { apiInterceptor } from "../api-interceptor";
 import { ApiResponse, queryError, UserTokenInfo } from "../api-response";
@@ -30,8 +31,7 @@ async function makeTransaction(
     if (accounts.length === 0) {
         return {
             success: false,
-            status: 100,
-            description: `Account with IBAN ${senderIban} doesn't exist for current user`
+            description: `Račun sa IBAN-om ${senderIban} ne postoji za trenutnog korisnika`
         };
     }
 
@@ -40,8 +40,7 @@ async function makeTransaction(
     if (amount > account.balance) {
         return {
             success: false,
-            status: 100,
-            description: "Not enough balance"
+            description: "Nedovoljno sredstava"
         };
     }
 
@@ -50,8 +49,7 @@ async function makeTransaction(
     if (receivingAccount.length === 0) {
         return {
             success: false,
-            status: 100,
-            description: "Receiving account doesn't exist"
+            description: "Uplatni račun ne postoji"
         };
     }
 
@@ -81,9 +79,8 @@ async function makeTransaction(
         [amount * exchangeRate, receiverIban, senderIban]);
 
     return {
-        success: false,
-        status: 100,
-        description: ""
+        success: true,
+        description: "Uspjeh"
     };
 }
 
@@ -121,14 +118,12 @@ export function getAccountsRouter(pool: mysql.Pool) {
                 if (sqlRes.affectedRows === 1) {
                     res.json(<ApiResponse>{
                         success: true,
-                        status: 200,
-                        description: "Account opened successfully"
+                        description: "Račun uspješno otvoren"
                     });
                 } else {
                     res.json(<ApiResponse>{
                         success: false,
-                        status: 100,
-                        description: "Error opening account"
+                        description: "Greška pri otvaranju računa"
                     });
                 }
             }
@@ -152,8 +147,7 @@ export function getAccountsRouter(pool: mysql.Pool) {
                 if (accounts.length === 0) {
                     return res.json(<ApiResponse>{
                         success: false,
-                        status: 100,
-                        description: `Account with IBAN ${iban} doesn't exist for current user`
+                        description: `Račun sa IBAN-om ${iban} ne postoji za trenutnog korisnika`
                     });
                 }
 
@@ -173,9 +167,8 @@ export function getAccountsRouter(pool: mysql.Pool) {
 
                 res.json(<ApiResponse>{
                     success: true,
-                    status: 200,
                     value: account,
-                    description: "Successfully found accounts"
+                    description: "Račun pronađen"
                 });
             }
             catch (e) {
@@ -198,15 +191,13 @@ export function getAccountsRouter(pool: mysql.Pool) {
                 if (account.length === 0) {
                     return res.json(<ApiResponse>{
                         success: false,
-                        status: 100,
-                        description: "Account doesn't exist"
+                        description: "Račun ne postoji"
                     });
                 }
 
                 res.json(<ApiResponse>{
                     success: true,
-                    status: 200,
-                    description: "Account found",
+                    description: "Račun proneđen",
                     value: account[0]
                 });
             }

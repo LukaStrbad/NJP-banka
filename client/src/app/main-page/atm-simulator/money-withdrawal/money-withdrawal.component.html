@@ -3,7 +3,7 @@
 </div>
 
 <div *ngIf="success" class="alert alert-info m-3">
-    Money withdrawn successfully
+    Novac uspješno isplaćen
 </div>
 
 <div *ngIf="account" class="row">
@@ -14,10 +14,10 @@
     </div>
     <form class="col-6" #withdrawForm="ngForm">
         <div class="m-4">
-            <label for="customAmount" class="form-label">Custom amount</label>
+            <label for="customAmount" class="form-label">Drugi iznos</label>
             <input type="number" class="form-control mb-1" name="customAmount" id="customAmount" value="0" min="0"
                 [max]="account.balance" [(ngModel)]="withdrawAmount">
-            <button type="submit" class="btn btn-primary" [disabled]="!withdrawForm.valid" (click)="withdrawMoney(withdrawAmount)">Withdraw</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!withdrawForm.valid" (click)="withdrawMoney(withdrawAmount)">Isplati</button>
         </div>
     </form>
 </div>

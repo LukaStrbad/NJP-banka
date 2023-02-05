@@ -3,7 +3,6 @@ import { config } from "./config";
 
 export interface ApiResponse {
     success: boolean,
-    status: number | string,
     token?: string,
     userInfo?: UserTokenInfo,
     value?: any,
@@ -13,8 +12,7 @@ export interface ApiResponse {
 export function queryError() {
     return <ApiResponse>{
         success: false,
-        status: 100,
-        description: "Error with query"
+        description: "Greška sa bazom podataka"
     };
 }
 

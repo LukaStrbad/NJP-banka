@@ -3,7 +3,7 @@
 </div>
 
 <div *ngIf="success" class="alert alert-info m-3">
-    Money deposited successfully
+    Novac uspješno uplaćen
 </div>
 
 <form *ngIf="account" #depositForm="ngForm" class="m-3">
@@ -15,5 +15,5 @@
     </div>
 
     <button type="submit" class="btn btn-primary" [disabled]="!depositForm.valid"
-        (click)="depositMoney()">Deposit</button>
+        (click)="depositMoney()">Uplati</button>
 </form>

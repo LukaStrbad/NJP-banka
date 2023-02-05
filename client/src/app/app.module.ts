@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -24,6 +24,8 @@ import { AtmMenuComponent } from './main-page/atm-simulator/atm-menu/atm-menu.co
 import { ViewBalanceComponent } from './main-page/atm-simulator/view-balance/view-balance.component';
 import { MoneyWithdrawalComponent } from './main-page/atm-simulator/money-withdrawal/money-withdrawal.component';
 import { MoneyDepositComponent } from './main-page/atm-simulator/money-deposit/money-deposit.component';
+import localeHr from '@angular/common/locales/hr';
+import { registerLocaleData } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -58,9 +60,16 @@ import { MoneyDepositComponent } from './main-page/atm-simulator/money-deposit/m
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
+    },
+    {
+      provide: LOCALE_ID,
+      useValue: "hr-HR",
     }
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
+  constructor() {
+    registerLocaleData(localeHr);
+  }
 }

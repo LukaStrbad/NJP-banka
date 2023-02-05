@@ -17,7 +17,7 @@ export function getAuthRouter(pool: mysql.Pool) {
                     res.json(<ApiResponse>{
                         success: false,
                         status: "error",
-                        description: "User doesn't exist"
+                        description: "Korisnik ne postoji"
                     });
                     return;
                 }
@@ -33,16 +33,14 @@ export function getAuthRouter(pool: mysql.Pool) {
                     };
                     res.json(<ApiResponse>{
                         success: true,
-                        status: 200,
                         token: generateSignedToken(userInfo),
                         userInfo: userInfo,
-                        description: "Token generated successfully"
+                        description: "Token uspješno generiran"
                     });
                 } else {
                     res.json(<ApiResponse>{
                         success: false,
-                        status: 150,
-                        description: "Wrong password"
+                        description: "Kriva lozinka"
                     });
                 }
             }
@@ -69,8 +67,7 @@ export function getAuthRouter(pool: mysql.Pool) {
                     || email == undefined) {
                     return res.json(<ApiResponse>{
                         success: false,
-                        status: 100,
-                        description: "Email, first name, last name, date of birth and password must be provided."
+                        description: "E-mail, ime, prezime, datum rođenja i lozinka moraju postojati."
                     });
                 }
 
@@ -83,8 +80,7 @@ export function getAuthRouter(pool: mysql.Pool) {
                 if (dobFormatted > years18) {
                     return res.json(<ApiResponse>{
                         success: false,
-                        status: 100,
-                        description: "User is less than 18 years old"
+                        description: "Korisnik je mlađi od 18"
                     });
                 }
 
@@ -93,8 +89,7 @@ export function getAuthRouter(pool: mysql.Pool) {
                 if (checkExistingUser.length > 0) {
                     return res.json(<ApiResponse>{
                         success: false,
-                        status: 100,
-                        description: "User already exists"
+                        description: "Korisnik već postoji"
                     });
                 }
 
@@ -115,10 +110,9 @@ export function getAuthRouter(pool: mysql.Pool) {
 
                 res.json(<ApiResponse>{
                     success: true,
-                    status: 200,
                     token: generateSignedToken(newUser[0]),
                     userInfo: newUser[0],
-                    description: "Login successful"
+                    description: "Prijava uspješna"
                 });
             }
             catch (e) {
