@@ -9,6 +9,7 @@ import { AtmSimulatorComponent } from "./main-page/atm-simulator/atm-simulator.c
 import { AccountOverviewComponent } from './account-overview/account-overview.component';
 import { PaymentComponent } from './main-page/payment/payment.component';
 import { atmRoutes } from './main-page/atm-simulator/atm-routing.module';
+import { AdminUsersComponent } from './main-page/admin/admin-users/admin-users.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "login", pathMatch: "full" },
@@ -18,7 +19,13 @@ const routes: Routes = [
       { path: "", redirectTo: "overview", pathMatch: "full" },
       { path: "overview", component: OverviewComponent },
       { path: "atm", component: AtmSimulatorComponent, children: atmRoutes },
-      { path: "payment", component: PaymentComponent }
+      { path: "payment", component: PaymentComponent },
+      {
+        path: "admin", 
+        children: [
+          { path: "users", component: AdminUsersComponent }
+        ]
+      }
     ]
   },
   { path: "register", component: RegisterComponent },

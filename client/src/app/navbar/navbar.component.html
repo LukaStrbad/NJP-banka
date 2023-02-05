@@ -17,11 +17,11 @@
               routerLink="/main/atm">Bankomat</a></li>
           <li class="nav-item"><a class="nav-link" [ngClass]="{'active' : currentRoute == '/main/payment'}"
               routerLink="/main/payment">Uplata</a></li>
-          <li class="nav-item dropdown" *ngIf="user?.isAdmin === true">
-            <a class="nav-link dropdown-toggle" ngClass="{'active': currentRoute.startsWith('/main/admin')}" href="#"
+          <li class="nav-item dropdown" *ngIf="user?.isAdmin">
+            <a class="nav-link dropdown-toggle" [ngClass]="{'active': currentRoute.startsWith('/main/admin')}" href="#"
               role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item">Korisnici</a></li>
+              <li><a class="dropdown-item" routerLink="/main/admin/users">Korisnici</a></li>
               <li><a class="dropdown-item">Bankovni računi</a></li>
               <li><a class="dropdown-item">Transakcije</a></li>
             </ul>

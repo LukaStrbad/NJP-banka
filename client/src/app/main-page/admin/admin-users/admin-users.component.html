@@ -1,0 +1,31 @@
+<div *ngIf="error" class="alert alert-danger">
+    {{error}}
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped text-center align-middle">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Ime</th>
+                <th scope="col">Prezime</th>
+                <th scope="col">Datum rođenja</th>
+                <th scope="col">Administrator</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users" [ngClass]="{'table-primary' : user.email === currentUser?.email}">
+                <td>{{user.id}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.firstName}}</td>
+                <td>{{user.lastName}}</td>
+                <td>{{user.dateOfBirth | date:"dd.MM.yyyy."}}</td>
+                <td>{{user.isAdmin ? 'Da' : 'Ne'}}
+                    <button *ngIf="!user.isAdmin" class="btn btn-sm btn-primary ms-1"
+                        (click)="promoteToAdmin(user.id)">Promoviraj</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

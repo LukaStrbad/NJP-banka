@@ -6,7 +6,7 @@
 
 <div *ngIf="authService.isLoggedIn()" class="container">
   <div class="row">
-    <h1 class="text-center m-3">Dobro došli {{user?.firstName}} {{user?.lastName}} <i *ngIf="user?.isAdmin === true"
+    <h1 class="text-center m-3">Dobro došli {{user?.firstName}} {{user?.lastName}} <i *ngIf="user?.isAdmin"
         class="bi bi-shield"></i></h1>
   </div>
   <router-outlet></router-outlet>
