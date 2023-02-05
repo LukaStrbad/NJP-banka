@@ -4,8 +4,6 @@ import { apiInterceptor } from "../api-interceptor";
 import { ApiResponse, queryError, UserTokenInfo } from "../api-response";
 import { getTecaj } from "../tecaj-api";
 
-const BANK_IBAN = "HR0000000000000000000";
-
 async function getAccounts(conn: mysql.Connection): Promise<[]> {
     return conn.query("SELECT * FROM accounts;");
 }
@@ -62,7 +60,7 @@ async function makeTransaction(
 
     if (account.currency != "EUR") {
         let tecaj = tecajevi.find(t => t.valuta == account.currency);
-        let value = parseFloat(tecaj?.srednji_tecaj.replace(",", ".") ?? "")
+        let value = parseFloat(tecaj?.kupovni_tecaj.replace(",", ".") ?? "")
         exchangeRate = 1 / value;
     }
 
@@ -70,7 +68,7 @@ async function makeTransaction(
 
     if (receivingCurrency != "EUR") {
         let tecaj = tecajevi.find(t => t.valuta == receivingCurrency);
-        let value = parseFloat(tecaj?.srednji_tecaj.replace(",", ".") ?? "");
+        let value = parseFloat(tecaj?.prodajni_tecaj.replace(",", ".") ?? "");
         exchangeRate *= value;
     }
 

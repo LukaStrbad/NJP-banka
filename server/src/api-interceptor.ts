@@ -25,18 +25,18 @@ export function apiInterceptor(
     if (token) {
         let [error, decoded] = verifyToken(token);
         if (error) {
-            return res.status(403).send(<ApiResponse> {
+            return res.status(401).send(<ApiResponse> {
                 success: false,
-                status: 403,
+                status: 401,
                 description: "Wrong token"
             });
         }
         req["decoded"] = decoded;
         next();
     } else {
-        return res.status(403).send(<ApiResponse>{
+        return res.status(401).send(<ApiResponse>{
             success: false,
-            status: 403,
+            status: 401,
             description: "No token provided"
         });
     }

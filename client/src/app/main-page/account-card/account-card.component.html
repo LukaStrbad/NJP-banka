@@ -6,7 +6,6 @@
       </button>
     </h6>
     <h5 class="card-text">Balance: {{account.balance | currency:account.currency}}</h5>
-    <button class="btn btn-primary m-1" [routerLink]="'/main/atm/' + account.iban">ATM</button>
     <button class="btn btn-primary m-1" [routerLink]="'/account-overview/' + account.iban">Overview</button>
   </div>
 </div>

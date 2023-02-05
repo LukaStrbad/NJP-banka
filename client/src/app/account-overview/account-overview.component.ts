@@ -12,6 +12,7 @@ import { AccountsService } from '../services/accounts.service';
 export class AccountOverviewComponent implements OnInit {
   iban: string;
   accountInfo: AccountInfo | null = null;
+  singleList = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -21,6 +22,10 @@ export class AccountOverviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let singleList = localStorage.getItem("singleList");
+
+    this.singleList = singleList === "true";
+
     this.init();
   }
 
@@ -32,5 +37,10 @@ export class AccountOverviewComponent implements OnInit {
     if (accountInfo != null) {
       this.accountInfo = accountInfo;
     }
+  }
+
+  changeSingleList() {
+    this.singleList = !this.singleList;
+    localStorage.setItem("singleList", this.singleList.toString());
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../services/auth.service";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -12,13 +12,21 @@ export class LoginComponent implements OnInit {
   password = "";
   message = "";
 
+  tokenExpired = false;
+
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
   }
 
   ngOnInit(): void {
+    if (this.route.snapshot.queryParams["expired"] !== undefined) {
+      console.log("Token has expired");
+      this.tokenExpired = true;
+    }
+
     this.authService.authChange.subscribe(loggedIn => {
       if (loggedIn) {
         this.router.navigateByUrl("main").then(() => {

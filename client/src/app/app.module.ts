@@ -16,6 +16,14 @@ import { AuthInterceptor } from './services/auth.interceptor';
 import { AccountCardComponent } from './main-page/account-card/account-card.component';
 import { AccountOverviewComponent } from './account-overview/account-overview.component';
 import { PaymentComponent } from './main-page/payment/payment.component';
+import { ReceivedCardComponent } from './account-overview/received-card/received-card.component';
+import { SentCardComponent } from './account-overview/sent-card/sent-card.component';
+import { JoinTransactionsPipe } from './account-overview/join-transactions.pipe';
+import { OrderByPipe } from './pipes/order-by.pipe';
+import { AtmMenuComponent } from './main-page/atm-simulator/atm-menu/atm-menu.component';
+import { ViewBalanceComponent } from './main-page/atm-simulator/view-balance/view-balance.component';
+import { MoneyWithdrawalComponent } from './main-page/atm-simulator/money-withdrawal/money-withdrawal.component';
+import { MoneyDepositComponent } from './main-page/atm-simulator/money-deposit/money-deposit.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +35,15 @@ import { PaymentComponent } from './main-page/payment/payment.component';
     OverviewComponent,
     AccountCardComponent,
     AccountOverviewComponent,
-    PaymentComponent
+    PaymentComponent,
+    ReceivedCardComponent,
+    SentCardComponent,
+    JoinTransactionsPipe,
+    OrderByPipe,
+    AtmMenuComponent,
+    ViewBalanceComponent,
+    MoneyWithdrawalComponent,
+    MoneyDepositComponent
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,6 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { catchError, Observable, throwError } from "rxjs";
 import { AuthService } from "./auth.service";
 
 @Injectable()
@@ -18,7 +18,16 @@ export class AuthInterceptor implements HttpInterceptor {
       params: req.params.set("token", token)
     });
 
-    return next.handle(clonedReq);
+    return next
+      .handle(clonedReq)
+      .pipe(catchError(err => {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status === 401) {
+            window.location.href = "/login?expired"
+          }
+        }
+        return throwError(() => err);
+      }));
   }
 
 }
