@@ -1,0 +1,23 @@
+<div *ngIf="error" class="alert alert-danger m-3">
+    {{error}}
+</div>
+
+<div *ngIf="success" class="alert alert-info m-3">
+    Money withdrawn successfully
+</div>
+
+<div *ngIf="account" class="row">
+    <div *ngFor="let value of values; let i = index" class="col-6" [ngClass]="i % 2 == 1 ? 'text-end' : 'text-start'">
+        <button class="btn btn-secondary m-4 w-50" [disabled]="value > account.balance" (click)="withdrawMoney(value)">
+            {{value | currency:account.currency }}
+        </button>
+    </div>
+    <form class="col-6" #withdrawForm="ngForm">
+        <div class="m-4">
+            <label for="customAmount" class="form-label">Custom amount</label>
+            <input type="number" class="form-control mb-1" name="customAmount" id="customAmount" value="0" min="0"
+                [max]="account.balance" [(ngModel)]="withdrawAmount">
+            <button type="submit" class="btn btn-primary" [disabled]="!withdrawForm.valid" (click)="withdrawMoney(withdrawAmount)">Withdraw</button>
+        </div>
+    </form>
+</div>

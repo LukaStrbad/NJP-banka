@@ -1,0 +1,19 @@
+<div *ngIf="error" class="alert alert-danger m-3">
+    {{error}}
+</div>
+
+<div *ngIf="success" class="alert alert-info m-3">
+    Money deposited successfully
+</div>
+
+<form *ngIf="account" #depositForm="ngForm" class="m-3">
+    <div class="mb-3" *ngFor="let banknote of banknotes">
+        <label class="form-label" for="banknote{{banknote.denomination}}">{{banknote.denomination |
+            currency:account.currency}}</label>
+        <input class="form-control" type="number" name="banknote{{banknote.denomination}}"
+            id="banknote{{banknote.denomination}}" [(ngModel)]="banknote.amount" min="0">
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="!depositForm.valid"
+        (click)="depositMoney()">Deposit</button>
+</form>

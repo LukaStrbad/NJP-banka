@@ -4,6 +4,7 @@ import { getTransactionsRouter } from "./routes/transactions";
 import mysql from "promise-mysql";
 import { config } from "./config";
 import { getAuthRouter } from "./routes/auth";
+import { getAtmRouter } from "./routes/atm";
 
 
 (async () => {
@@ -28,6 +29,7 @@ import { getAuthRouter } from "./routes/auth";
     app.use("/auth", getAuthRouter(pool));
     app.use("/accounts", getAccountsRouter(pool));
     app.use("/transactions", getTransactionsRouter(pool));
+    app.use("/atm", getAtmRouter(pool));
 
     const server = app.listen(8081, () => {
         console.log("Listening on http://localhost:8081/");

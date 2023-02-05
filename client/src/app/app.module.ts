@@ -22,6 +22,8 @@ import { JoinTransactionsPipe } from './account-overview/join-transactions.pipe'
 import { OrderByPipe } from './pipes/order-by.pipe';
 import { AtmMenuComponent } from './main-page/atm-simulator/atm-menu/atm-menu.component';
 import { ViewBalanceComponent } from './main-page/atm-simulator/view-balance/view-balance.component';
+import { MoneyWithdrawalComponent } from './main-page/atm-simulator/money-withdrawal/money-withdrawal.component';
+import { MoneyDepositComponent } from './main-page/atm-simulator/money-deposit/money-deposit.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,9 @@ import { ViewBalanceComponent } from './main-page/atm-simulator/view-balance/vie
     JoinTransactionsPipe,
     OrderByPipe,
     AtmMenuComponent,
-    ViewBalanceComponent
+    ViewBalanceComponent,
+    MoneyWithdrawalComponent,
+    MoneyDepositComponent
   ],
   imports: [
     BrowserModule,
