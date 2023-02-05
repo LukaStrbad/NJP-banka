@@ -10,28 +10,12 @@ import { filter } from 'rxjs';
   styleUrls: ['./main-page.component.css']
 })
 export class MainPageComponent {
-  user!: User
-  currentRoute = "/main/overview";
+  user: User | null = null;
 
   constructor(
     public authService: AuthService,
-    private router: Router
+    router: Router
   ) {
-    // If user is not logged in redirect to /login
-    this.authService.authChange.subscribe(async value => {
-      if (!value) {
-        await router.navigateByUrl("login");
-      }
-    })
-    this.user = authService.getUser()!;
-
-    this.currentRoute = router.url;
-
-    router.events
-      .pipe(filter(event => event instanceof NavigationStart))
-      .subscribe(val => {
-        let navStart = val as NavigationStart;
-        this.currentRoute = navStart.url;
-      });
+    this.user = authService.getUser();
   }
 }

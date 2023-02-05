@@ -26,6 +26,7 @@ import { MoneyWithdrawalComponent } from './main-page/atm-simulator/money-withdr
 import { MoneyDepositComponent } from './main-page/atm-simulator/money-deposit/money-deposit.component';
 import localeHr from '@angular/common/locales/hr';
 import { registerLocaleData } from '@angular/common';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { registerLocaleData } from '@angular/common';
     AtmMenuComponent,
     ViewBalanceComponent,
     MoneyWithdrawalComponent,
-    MoneyDepositComponent
+    MoneyDepositComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
