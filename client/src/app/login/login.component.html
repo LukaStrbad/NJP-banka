@@ -1,4 +1,7 @@
-<div class="container">
+<div class="container mt-3">
+  <div *ngIf="tokenExpired" class="alert alert-danger">
+    Your session has expired
+  </div>
   <form>
     <div class="mb-3">
       <label class="form-label" for="email">E-mail</label>
