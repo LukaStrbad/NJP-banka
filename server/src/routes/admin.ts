@@ -62,5 +62,24 @@ export function getAdminRouter(pool: mysql.Pool) {
             finally {
                 conn.release()
             }
+        })
+        .get("/accounts", async (req, res) => {
+            let conn = await pool.getConnection();
+
+            try {
+                let accounts = await conn.query<any[]>("SELECT * FROM accounts;");
+
+                return res.json(<ApiResponse> {
+                    success: true,
+                    description: "Računi dohvaćeni",
+                    value: accounts
+                });
+            }
+            catch (e) {
+                res.json(queryError());
+            }
+            finally {
+                conn.release()
+            }
         });
 }

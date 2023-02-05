@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Account } from 'src/app/model/account';
 import { User } from 'src/app/model/user';
 import { AdminService } from 'src/app/services/admin.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -10,6 +11,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class AdminUsersComponent implements OnInit {
   users: User[] = [];
+  accounts: Account[] = [];
   error = "";
   currentUser: User | null = null;
 
@@ -17,7 +19,7 @@ export class AdminUsersComponent implements OnInit {
     private adminService: AdminService,
     authService: AuthService
   ) {
-    adminService.errorEmitter.subscribe(err => this.error = err);
+    adminService.errorEmitter.subscribe(err => this.error = `<br> ${err}`);
     this.currentUser = authService.getUser();
   }
 
@@ -26,7 +28,14 @@ export class AdminUsersComponent implements OnInit {
   }
 
   async init() {
-    this.users = await this.adminService.getUsers() ?? [];
+    let [users, accounts] = await Promise
+      .all([this.adminService.getUsers(), this.adminService.getAccounts()]);
+    this.users = users ?? [];
+    this.accounts = accounts ?? [];
+  }
+
+  getNumOfAccounts(id: number): number {
+    return this.accounts.filter(a => a.userId == id).length;
   }
 
   async promoteToAdmin(id: number) {
@@ -34,7 +43,7 @@ export class AdminUsersComponent implements OnInit {
 
     let res = await this.adminService.makeAdmin(id);
 
-    if (res.success) {
+    if (res !== null) {
       await this.init();
     }
   }

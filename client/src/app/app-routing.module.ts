@@ -10,6 +10,7 @@ import { AccountOverviewComponent } from './account-overview/account-overview.co
 import { PaymentComponent } from './main-page/payment/payment.component';
 import { atmRoutes } from './main-page/atm-simulator/atm-routing.module';
 import { AdminUsersComponent } from './main-page/admin/admin-users/admin-users.component';
+import { AdminAccountsComponent } from './main-page/admin/admin-accounts/admin-accounts.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "login", pathMatch: "full" },
@@ -21,9 +22,10 @@ const routes: Routes = [
       { path: "atm", component: AtmSimulatorComponent, children: atmRoutes },
       { path: "payment", component: PaymentComponent },
       {
-        path: "admin", 
+        path: "admin",
         children: [
-          { path: "users", component: AdminUsersComponent }
+          { path: "users", component: AdminUsersComponent },
+          { path: "accounts", component: AdminAccountsComponent }
         ]
       }
     ]

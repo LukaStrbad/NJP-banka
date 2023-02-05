@@ -1,0 +1,20 @@
+<div class="table-responsive">
+    <table class="table table-striped text-center align-middle">
+        <thead>
+            <tr>
+                <th scope="col">IBAN</th>
+                <th scope="col">Vlasnik</th>
+                <th scope="col">Iznos</th>
+                <th scope="col">Valuta</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let account of accounts">
+                <td>{{account.iban}}</td>
+                <td>{{getOwner(account.userId)}}</td>
+                <td>{{account.balance}}</td>
+                <td>{{account.currency}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

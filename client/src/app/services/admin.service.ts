@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { lastValueFrom, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Account } from '../model/account';
 import { ApiResponse } from '../model/api-response';
 import { User } from '../model/user';
 
@@ -21,15 +22,33 @@ export class AdminService {
       .get<ApiResponse>(`${this.apiUrl}/users`));
 
     if (!res.success) {
+      this.errorEmitter.next(res.description);
       return null;
     }
 
     return res.value as User[];
   }
 
-  async makeAdmin(userId: number) {
-    return await lastValueFrom(this.http
+  async makeAdmin(userId: number): Promise<void | null> {
+    let res = await lastValueFrom(this.http
       .patch<ApiResponse>(`${this.apiUrl}/users/make-admin`,
         { userId: userId }));
+
+    if (!res.success) {
+      this.errorEmitter.next(res.description);
+      return null;
+    }
+  }
+
+  async getAccounts(): Promise<Account[] | null> {
+    let res = await lastValueFrom(this.http
+      .get<ApiResponse>(`${this.apiUrl}/accounts`));
+
+    if (!res.success) {
+      this.errorEmitter.next(res.description);
+      return null;
+    }
+
+    return res.value as Account[];
   }
 }

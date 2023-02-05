@@ -1,13 +1,10 @@
 import { ReceivingTransaction, SendingTransaction } from "./transaction"
 
-export class Account {
-  constructor(
-    public iban: string,
-    public balance: number,
-    public userId: number,
-    public currency: string,
-  ) {
-  }
+export interface Account {
+  iban: string;
+  balance: number;
+  userId: number;
+  currency: string;
 }
 
 export interface AccountInfo {
