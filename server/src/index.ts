@@ -5,7 +5,7 @@ import { config } from "./config";
 import { getAuthRouter } from "./routes/auth";
 import { getAtmRouter } from "./routes/atm";
 import { getAdminRouter } from "./routes/admin";
-
+import path from "path";
 
 (async () => {
     const app = express();
@@ -22,14 +22,15 @@ import { getAdminRouter } from "./routes/admin";
         next();
     });
 
-    app.get("/", (req, res) => {
-        res.send("Hello world");
-    });
+    app.use("/api/auth", getAuthRouter(pool));
+    app.use("/api/accounts", getAccountsRouter(pool));
+    app.use("/api/atm", getAtmRouter(pool));
+    app.use("/api/admin", getAdminRouter(pool));
 
-    app.use("/auth", getAuthRouter(pool));
-    app.use("/accounts", getAccountsRouter(pool));
-    app.use("/atm", getAtmRouter(pool));
-    app.use("/admin", getAdminRouter(pool));
+    app.use(express.static(path.join(__dirname, "/public/app")));
+    app.get("*", async (req, res) => {
+        res.sendFile(path.join(__dirname + "/public/app/index.html"));
+    });
 
     const server = app.listen(8081, () => {
         console.log("Listening on http://localhost:8081/");
