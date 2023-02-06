@@ -73,9 +73,11 @@ async function makeTransaction(
     }
 
     let maxSendId = (await conn.query("SELECT MAX(id) AS id from sendTransactions"))[0].id as number;
-    let maxReceiveId = (await conn.query("SELECT MAX(id) AS id from sendTransactions"))[0].id as number;
+    let maxReceiveId = (await conn.query("SELECT MAX(id) AS id from receiveTransactions"))[0].id as number;
 
     let newId = Math.max(maxSendId, maxReceiveId) + 1;
+
+    console.log(`${maxSendId} ${maxReceiveId} ${newId}`);
 
     let update1 = await conn.query(`UPDATE accounts SET balance = balance - ? WHERE iban = ?;`, [amount, senderIban]);
     let insert1 = await conn.query(`INSERT INTO sendTransactions (id, amount, iban, receiverIban, receivingCurrency, exchangeRate) VALUES(?, ?, ?, ?, ?, ?);`,
