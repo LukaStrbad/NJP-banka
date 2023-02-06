@@ -2,6 +2,7 @@ import express from "express";
 import mysql from "promise-mysql";
 import { apiInterceptor } from "../api-interceptor";
 import { ApiResponse, queryError, UserTokenInfo } from "../api-response";
+import { getNextTransactionId } from "./accounts";
 
 export function getAtmRouter(pool: mysql.Pool) {
     return express.Router()
@@ -34,8 +35,9 @@ export function getAtmRouter(pool: mysql.Pool) {
                     `UPDATE accounts SET balance = balance - ?
                     WHERE iban = ? AND userId = ?;`, [amount, iban, tokenInfo.id]);
 
-                let insert1 = await conn.query(`INSERT INTO sendTransactions (amount, iban, receiverIban, receivingCurrency) VALUES(?, ?, NULL, ?);`,
-                    [amount, iban, accountBalance[0].currency]);
+                let newId = await getNextTransactionId(conn);
+                let insert1 = await conn.query(`INSERT INTO sendTransactions (id, amount, iban, receiverIban, receivingCurrency) VALUES(?, ?, ?, NULL, ?);`,
+                    [newId, amount, iban, accountBalance[0].currency]);
 
                 if (queryResult.affectedRows === 0) {
                     return res.json(<ApiResponse>{
@@ -77,8 +79,9 @@ export function getAtmRouter(pool: mysql.Pool) {
                     `UPDATE accounts SET balance = balance + ?
                     WHERE iban = ? AND userId = ?;`, [amount, iban, tokenInfo.id]);
 
-                let insert1 = await conn.query(`INSERT INTO receiveTransactions (amount, iban, senderIban) VALUES(?, ?, NULL);`,
-                    [amount, iban]);
+                let newId = await getNextTransactionId(conn);
+                let insert1 = await conn.query(`INSERT INTO receiveTransactions (id,amount, iban, senderIban) VALUES(?, ?, ?, NULL);`,
+                    [newId, amount, iban]);
 
                 if (queryResult.affectedRows === 0) {
                     return res.json(<ApiResponse>{

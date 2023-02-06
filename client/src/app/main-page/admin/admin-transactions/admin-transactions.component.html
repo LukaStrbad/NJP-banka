@@ -16,9 +16,9 @@
         <tbody>
             <tr *ngFor="let transaction of transactions">
                 <td>{{transaction.sent | currency:transaction.sentCurrency}}</td>
-                <td>{{transaction.sender}}</td>
+                <td>{{transaction.sender ? transaction.sender : 'bankomat'}}</td>
                 <td>{{transaction.received | currency:transaction.receivedCurrency}}</td>
-                <td>{{transaction.receiver}}</td>
+                <td>{{transaction.receiver ? transaction.receiver : 'bankomat'}}</td>
                 <td>{{transaction.time_stamp | date:"dd.MM.yyyy. HH:mm"}}</td>
             </tr>
         </tbody>

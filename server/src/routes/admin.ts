@@ -88,17 +88,35 @@ export function getAdminRouter(pool: mysql.Pool) {
             try {
                 let transactions = await conn.query(
                     `SELECT s.amount AS sent, sAcc.currency AS sentCurrency,
-                                r.amount AS received, rAcc.currency AS receivedCurrency,
-                                CONCAT(sUser.firstName, ' ', sUser.lastName, ' (', s.iban, ')') AS sender,
-                                CONCAT(rUser.firstName, ' ', rUser.lastName, ' (', r.iban, ')') AS receiver,
-                                s.time_stamp
-                            FROM sendTransactions s 
-                            INNER JOIN accounts sAcc ON s.iban = sAcc.iban
-                            INNER JOIN users sUser ON sAcc.userId = sUser.id
-                            INNER JOIN receiveTransactions r ON s.id = r.id
-                            INNER JOIN accounts rAcc ON r.iban = rAcc.iban
-                            INNER JOIN users rUser ON rAcc.userId = rUser.id
-                            ORDER BY time_stamp DESC;`
+                        r.amount AS received, rAcc.currency AS receivedCurrency,
+                        CONCAT(sUser.firstName, ' ', sUser.lastName, ' (', s.iban, ')') AS sender,
+                        CONCAT(rUser.firstName, ' ', rUser.lastName, ' (', r.iban, ')') AS receiver,
+                        s.time_stamp
+                    FROM sendTransactions s 
+                    INNER JOIN accounts sAcc ON s.iban = sAcc.iban
+                    INNER JOIN users sUser ON sAcc.userId = sUser.id
+                    INNER JOIN receiveTransactions r ON s.id = r.id
+                    INNER JOIN accounts rAcc ON r.iban = rAcc.iban
+                    INNER JOIN users rUser ON rAcc.userId = rUser.id
+                    UNION ALL
+                    SELECT NULL AS sent, NULL AS sentCurrency, 
+                        amount AS received, a.currency AS receivedCurrency,
+                        NULL AS sender, CONCAT(users.firstName, ' ', users.lastName, ' (', a.iban, ')') AS receiver,
+                        time_stamp
+                    FROM receiveTransactions r 
+                    INNER JOIN accounts a ON r.iban = a.iban
+                    INNER JOIN users ON a.userId = users.id
+                    WHERE senderIban IS NULL
+                    UNION ALL
+                    SELECT amount AS sent, a.currency AS sentCurrency, 
+                        NULL AS received, NULL AS receivedCurrency,
+                        CONCAT(users.firstName, ' ', users.lastName, ' (', a.iban, ')') AS sender, NULL AS receiver,
+                        time_stamp
+                    FROM sendTransactions r 
+                    INNER JOIN accounts a ON r.iban = a.iban
+                    INNER JOIN users ON a.userId = users.id
+                    WHERE receiverIban IS NULL
+                    ORDER BY time_stamp DESC;`
                 );
 
                 return res.json(<ApiResponse>{

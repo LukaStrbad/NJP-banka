@@ -18,6 +18,13 @@ function generateRandomIBAN(): string {
     return "HR" + value;
 }
 
+export async function getNextTransactionId(conn: mysql.Connection) {
+    let maxSendId = (await conn.query("SELECT MAX(id) AS id from sendTransactions"))[0].id as number;
+    let maxReceiveId = (await conn.query("SELECT MAX(id) AS id from receiveTransactions"))[0].id as number;
+
+    return Math.max(maxSendId, maxReceiveId) + 1;
+}
+
 async function makeTransaction(
     conn: mysql.Connection,
     userId: number,
@@ -71,11 +78,7 @@ async function makeTransaction(
             exchangeRate *= value;
         }
     }
-
-    let maxSendId = (await conn.query("SELECT MAX(id) AS id from sendTransactions"))[0].id as number;
-    let maxReceiveId = (await conn.query("SELECT MAX(id) AS id from receiveTransactions"))[0].id as number;
-
-    let newId = Math.max(maxSendId, maxReceiveId) + 1;
+    let newId = await getNextTransactionId(conn);
 
     let update1 = await conn.query(`UPDATE accounts SET balance = balance - ? WHERE iban = ?;`, [amount, senderIban]);
     let insert1 = await conn.query(`INSERT INTO sendTransactions (id, amount, iban, receiverIban, receivingCurrency, exchangeRate) VALUES(?, ?, ?, ?, ?, ?);`,
