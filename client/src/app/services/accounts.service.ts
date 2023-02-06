@@ -39,8 +39,16 @@ export class AccountsService {
     return response.value;
   }
 
-  async openNew() {
-    return await lastValueFrom(this.http.post<ApiResponse>(`${this.apiUrl}/open-new`, {}));
+  async openNew(currency: string | null = null) {
+    let url = `${this.apiUrl}/open-new`;
+    if (currency) {
+      url += `?currency=${currency}`;
+    }
+    return await lastValueFrom(this.http.post<ApiResponse>(url, {}));
+  }
+
+  async getCurrencies(): Promise<string[]> {
+    return await lastValueFrom(this.http.get<string[]>(`${this.apiUrl}/available-currencies`));
   }
 
   async transferMoney(senderIban: string, receiverIban: string, amount: number) {

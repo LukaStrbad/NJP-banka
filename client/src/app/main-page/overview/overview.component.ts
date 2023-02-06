@@ -16,6 +16,8 @@ export class OverviewComponent {
   accounts: Account[] | undefined = undefined;
   showAccountCreateError = false;
   apiUrl = `${environment.API_URL}/accounts`;
+  currencies: string[] = [];
+  newAccountCurrency = "";
 
   constructor(
     private authService: AuthService,
@@ -30,7 +32,10 @@ export class OverviewComponent {
   }
 
   async loadAccounts() {
-    this.accounts = await this.accountsService.getAllAccounts();
+    [this.accounts, this.currencies] = await Promise
+      .all([this.accountsService.getAllAccounts(), this.accountsService.getCurrencies()]);
+
+    this.newAccountCurrency = this.currencies[0];
   }
 
   async openAccount() {
@@ -39,13 +44,20 @@ export class OverviewComponent {
       return;
     }
 
-    let response = await this.accountsService.openNew();
+    let response = await this.accountsService.openNew(this.newAccountCurrency);
 
     if (response.success) {
       this.loadAccounts();
       this.showAccountCreateError = false;
     } else {
       this.showAccountCreateError = true;
+    }
+  }
+
+  currencyChanged(event: EventTarget | null) {
+    if (event instanceof HTMLSelectElement) {
+      let select = event as HTMLSelectElement;
+      this.newAccountCurrency = select.value;
     }
   }
 }

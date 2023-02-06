@@ -29,12 +29,21 @@
         </div>
 
         <div class="modal-body">
-          <p>Jeste li sigurni da želite otvoriti novi račun?</p>
+          <form>
+            <div class="mb-3">
+              <label for="currency">Valuta</label>
+              <select class="form-select" (change)="currencyChanged($event.target)">
+                <option *ngFor="let currency of currencies">{{currency}}</option>
+              </select>
+            </div>
+          </form>
+
+          Račun će biti otvoren u valuti {{newAccountCurrency}}
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Ne</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="openAccount()">Da</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Odustani</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="openAccount()">Otvori</button>
         </div>
       </div>
     </div>

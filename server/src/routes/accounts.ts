@@ -53,21 +53,23 @@ async function makeTransaction(
         };
     }
 
-    let tecajevi = await getTecaj();
     let exchangeRate = 1;
-
-    if (account.currency != "EUR") {
-        let tecaj = tecajevi.find(t => t.valuta == account.currency);
-        let value = parseFloat(tecaj?.kupovni_tecaj.replace(",", ".") ?? "")
-        exchangeRate = 1 / value;
-    }
-
     let receivingCurrency = receivingAccount[0].currency;
+    
+    // Only look up exchange rate if currencies are different
+    if (account.currency != receivingCurrency) {
+        let tecajevi = await getTecaj();
+        if (account.currency != "EUR") {
+            let tecaj = tecajevi.find(t => t.valuta == account.currency);
+            let value = parseFloat(tecaj?.kupovni_tecaj.replace(",", ".") ?? "")
+            exchangeRate = 1 / value;
+        }
 
-    if (receivingCurrency != "EUR") {
-        let tecaj = tecajevi.find(t => t.valuta == receivingCurrency);
-        let value = parseFloat(tecaj?.prodajni_tecaj.replace(",", ".") ?? "");
-        exchangeRate *= value;
+        if (receivingCurrency != "EUR") {
+            let tecaj = tecajevi.find(t => t.valuta == receivingCurrency);
+            let value = parseFloat(tecaj?.prodajni_tecaj.replace(",", ".") ?? "");
+            exchangeRate *= value;
+        }
     }
 
     let update1 = await conn.query(`UPDATE accounts SET balance = balance - ? WHERE iban = ?;`, [amount, senderIban]);
@@ -82,6 +84,10 @@ async function makeTransaction(
         success: true,
         description: "Uspjeh"
     };
+}
+
+async function getCurrencies() {
+    return ["EUR", ...(await getTecaj()).map(t => t.valuta)];
 }
 
 export function getAccountsRouter(pool: mysql.Pool) {
@@ -102,9 +108,22 @@ export function getAccountsRouter(pool: mysql.Pool) {
                 conn.release();
             }
         })
+        .get("/available-currencies", async (req, res) => {
+            res.json(await getCurrencies());
+        })
         .post("/open-new", async (req, res) => {
             let conn = await pool.getConnection();
             let tokenInfo = req["decoded"] as UserTokenInfo;
+            let currency = req.query["currency"]?.toString() ?? "";
+
+            let currencies = await getCurrencies();
+
+            if (!currencies.find(c => c == currency)) {
+                return res.json(<ApiResponse>{
+                    success: false,
+                    description: `Valuta ${currency} nije podržana`
+                });
+            }
 
             try {
                 let existing = await getAccounts(conn);
@@ -113,7 +132,7 @@ export function getAccountsRouter(pool: mysql.Pool) {
                     iban = generateRandomIBAN();
                 }
 
-                let sqlRes = await conn.query("INSERT INTO accounts VALUES (?, 0.0, ?, 'EUR')", [iban, tokenInfo.id]);
+                let sqlRes = await conn.query("INSERT INTO accounts VALUES (?, 0.0, ?, ?)", [iban, tokenInfo.id, currency ?? 'EUR']);
 
                 if (sqlRes.affectedRows === 1) {
                     res.json(<ApiResponse>{
@@ -153,7 +172,7 @@ export function getAccountsRouter(pool: mysql.Pool) {
 
                 let account = accounts[0];
                 let sendingTransactions = await conn.query(
-                `SELECT IFNULL(receiverIban, 'ATM') as iban, amount, exchangeRate,
+                    `SELECT IFNULL(receiverIban, 'ATM') as iban, amount, exchangeRate,
                         time_stamp, receivingCurrency FROM sendTransactions
                         WHERE iban = ?;`, iban);
 
