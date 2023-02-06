@@ -5,7 +5,8 @@ DROP TABLE IF EXISTS accounts;
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    email varchar(100) NOT NULL,
+    salt VARCHAR(36) NOT NULL,
+    email VARCHAR(100) NOT NULL,
     firstName VARCHAR(100) NOT NULL,
     lastName VARCHAR(100) NOT NULL,
     dateOfBirth DATE NOT NULL,
