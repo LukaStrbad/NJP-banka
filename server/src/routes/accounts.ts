@@ -72,13 +72,18 @@ async function makeTransaction(
         }
     }
 
+    let maxSendId = (await conn.query("SELECT MAX(id) AS id from sendTransactions"))[0].id as number;
+    let maxReceiveId = (await conn.query("SELECT MAX(id) AS id from sendTransactions"))[0].id as number;
+
+    let newId = Math.max(maxSendId, maxReceiveId) + 1;
+
     let update1 = await conn.query(`UPDATE accounts SET balance = balance - ? WHERE iban = ?;`, [amount, senderIban]);
-    let insert1 = await conn.query(`INSERT INTO sendTransactions (amount, iban, receiverIban, receivingCurrency, exchangeRate) VALUES(?, ?, ?, ?, ?);`,
-        [amount, senderIban, receiverIban, receivingCurrency, exchangeRate]);
+    let insert1 = await conn.query(`INSERT INTO sendTransactions (id, amount, iban, receiverIban, receivingCurrency, exchangeRate) VALUES(?, ?, ?, ?, ?, ?);`,
+        [newId, amount, senderIban, receiverIban, receivingCurrency, exchangeRate]);
 
     let update2 = await conn.query(`UPDATE accounts SET balance = balance + ? WHERE iban = ?;`, [amount * exchangeRate, receiverIban]);
     let insert2 = await conn.query(`INSERT INTO receiveTransactions (id, amount, iban, senderIban) VALUES(?, ?, ?, ?);`,
-        [insert1.insertId, amount * exchangeRate, receiverIban, senderIban]);
+        [newId, amount * exchangeRate, receiverIban, senderIban]);
 
     return {
         success: true,
