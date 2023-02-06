@@ -4,7 +4,7 @@
   </h3>
   <div class="card-body row justify-content-center g-3">
     <button *ngFor="let a of accounts" class="btn btn-outline-secondary col-8" (click)="account = a"
-      [routerLink]="a.iban">{{a.iban}}</button>
+      [routerLink]="a.iban">{{a.iban}} ({{a.currency}})</button>
   </div>
 </div>
 

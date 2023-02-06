@@ -1,12 +1,12 @@
 <nav class="navbar navbar-expand-lg bg-light mb-3">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/main">Banka TVZ <i class="bi bi-bank"></i></a>
+    <a class="navbar-brand" routerLink="/main">Banka TVZ <i class="bi bi-bank"></i></a>
 
     <ng-container *ngIf="authService.isLoggedIn()">
 
       <button class=" navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-      aria-controls="navbarSupport">
-      <span class="navbar-toggler-icon"></span>
+        aria-controls="navbarSupport">
+        <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarContent">

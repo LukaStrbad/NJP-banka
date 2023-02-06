@@ -55,7 +55,7 @@ async function makeTransaction(
 
     let exchangeRate = 1;
     let receivingCurrency = receivingAccount[0].currency;
-    
+
     // Only look up exchange rate if currencies are different
     if (account.currency != receivingCurrency) {
         let tecajevi = await getTecaj();
@@ -77,8 +77,8 @@ async function makeTransaction(
         [amount, senderIban, receiverIban, receivingCurrency, exchangeRate]);
 
     let update2 = await conn.query(`UPDATE accounts SET balance = balance + ? WHERE iban = ?;`, [amount * exchangeRate, receiverIban]);
-    let insert2 = await conn.query(`INSERT INTO receiveTransactions (amount, iban, senderIban) VALUES(?, ?, ?);`,
-        [amount * exchangeRate, receiverIban, senderIban]);
+    let insert2 = await conn.query(`INSERT INTO receiveTransactions (id, amount, iban, senderIban) VALUES(?, ?, ?, ?);`,
+        [insert1.insertId, amount * exchangeRate, receiverIban, senderIban]);
 
     return {
         success: true,
