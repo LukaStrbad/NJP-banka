@@ -18,7 +18,7 @@ import { AccountOverviewComponent } from './account-overview/account-overview.co
 import { PaymentComponent } from './main-page/payment/payment.component';
 import { ReceivedCardComponent } from './account-overview/received-card/received-card.component';
 import { SentCardComponent } from './account-overview/sent-card/sent-card.component';
-import { JoinTransactionsPipe } from './account-overview/join-transactions.pipe';
+import { JoinTransactionsPipe } from './pipes/join-transactions.pipe';
 import { OrderByPipe } from './pipes/order-by.pipe';
 import { AtmMenuComponent } from './main-page/atm-simulator/atm-menu/atm-menu.component';
 import { ViewBalanceComponent } from './main-page/atm-simulator/view-balance/view-balance.component';
