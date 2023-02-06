@@ -12,7 +12,7 @@
             <tr *ngFor="let account of accounts">
                 <td>{{account.iban}}</td>
                 <td>{{getOwner(account.userId)}}</td>
-                <td>{{account.balance}}</td>
+                <td>{{account.balance | number}}</td>
                 <td>{{account.currency}}</td>
             </tr>
         </tbody>

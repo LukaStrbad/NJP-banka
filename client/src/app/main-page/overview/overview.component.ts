@@ -14,7 +14,7 @@ import { AccountsService } from 'src/app/services/accounts.service';
 })
 export class OverviewComponent {
   accounts: Account[] | undefined = undefined;
-  showAccountCreateError = false;
+  error: string | null = null;
   apiUrl = `${environment.API_URL}/accounts`;
   currencies: string[] = [];
   newAccountCurrency = "";
@@ -48,9 +48,9 @@ export class OverviewComponent {
 
     if (response.success) {
       this.loadAccounts();
-      this.showAccountCreateError = false;
+      this.error = null;
     } else {
-      this.showAccountCreateError = true;
+      this.error = response.description;
     }
   }
 
