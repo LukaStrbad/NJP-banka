@@ -29,6 +29,7 @@ import { registerLocaleData } from '@angular/common';
 import { NavbarComponent } from './navbar/navbar.component';
 import { AdminUsersComponent } from './main-page/admin/admin-users/admin-users.component';
 import { AdminAccountsComponent } from './main-page/admin/admin-accounts/admin-accounts.component';
+import { AdminTransactionsComponent } from './main-page/admin/admin-transactions/admin-transactions.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { AdminAccountsComponent } from './main-page/admin/admin-accounts/admin-a
     MoneyDepositComponent,
     NavbarComponent,
     AdminUsersComponent,
-    AdminAccountsComponent
+    AdminAccountsComponent,
+    AdminTransactionsComponent
   ],
   imports: [
     BrowserModule,

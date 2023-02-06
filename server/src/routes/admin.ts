@@ -1,4 +1,4 @@
-import express from "express";
+import express, { query } from "express";
 import mysql from "promise-mysql";
 import { apiInterceptor } from "../api-interceptor";
 import { ApiResponse, queryError, UserTokenInfo } from "../api-response";
@@ -24,7 +24,7 @@ export function getAdminRouter(pool: mysql.Pool) {
             try {
                 let users = await conn.query<any[]>("SELECT id, email, firstName, lastName, dateOfBirth, isAdmin FROM users;");
 
-                return res.json(<ApiResponse> {
+                return res.json(<ApiResponse>{
                     success: true,
                     description: "Korisnici dohvaćeni",
                     value: users
@@ -45,12 +45,12 @@ export function getAdminRouter(pool: mysql.Pool) {
                 let update = await conn.query("UPDATE users SET isAdmin = TRUE WHERE id = ?;", userId);
 
                 if (update.affectedRows === 0) {
-                    return res.json(<ApiResponse> {
+                    return res.json(<ApiResponse>{
                         success: false,
                         description: "Korisnik ne postoji"
                     });
                 } else {
-                    return res.json(<ApiResponse> {
+                    return res.json(<ApiResponse>{
                         success: true,
                         description: "Korisnik uspješno promaknut u admina"
                     });
@@ -69,7 +69,7 @@ export function getAdminRouter(pool: mysql.Pool) {
             try {
                 let accounts = await conn.query<any[]>("SELECT * FROM accounts;");
 
-                return res.json(<ApiResponse> {
+                return res.json(<ApiResponse>{
                     success: true,
                     description: "Računi dohvaćeni",
                     value: accounts
@@ -80,6 +80,38 @@ export function getAdminRouter(pool: mysql.Pool) {
             }
             finally {
                 conn.release()
+            }
+        })
+        .get("/transactions", async (req, res) => {
+            let conn = await pool.getConnection();
+
+            try {
+                let transactions = await conn.query(
+                    `SELECT s.amount AS sent, sAcc.currency AS sentCurrency,
+                                r.amount AS received, rAcc.currency AS receivedCurrency,
+                                CONCAT(sUser.firstName, ' ', sUser.lastName, ' (', s.iban, ')') AS sender,
+                                CONCAT(rUser.firstName, ' ', rUser.lastName, ' (', r.iban, ')') AS receiver,
+                                s.time_stamp
+                            FROM sendTransactions s 
+                            INNER JOIN accounts sAcc ON s.iban = sAcc.iban
+                            INNER JOIN users sUser ON sAcc.userId = sUser.id
+                            INNER JOIN receiveTransactions r ON s.id = r.id
+                            INNER JOIN accounts rAcc ON r.iban = rAcc.iban
+                            INNER JOIN users rUser ON rAcc.userId = rUser.id
+                            ORDER BY time_stamp DESC;`
+                );
+
+                return res.json(<ApiResponse>{
+                    success: true,
+                    description: "Transakcije dohvaćene",
+                    value: transactions
+                });
+            }
+            catch (e) {
+                res.json(queryError());
+            }
+            finally {
+                conn.release();
             }
         });
 }

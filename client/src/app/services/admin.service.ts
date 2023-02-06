@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { Account } from '../model/account';
 import { ApiResponse } from '../model/api-response';
 import { User } from '../model/user';
+import { Admin } from '../model/transaction';
 
 @Injectable({
   providedIn: 'root'
@@ -50,5 +51,17 @@ export class AdminService {
     }
 
     return res.value as Account[];
+  }
+
+  async getTransactions(): Promise<Admin.Transaction[] | null> {
+    let res = await lastValueFrom(this.http
+      .get<ApiResponse>(`${this.apiUrl}/transactions`));
+
+    if (!res.success) {
+      this.errorEmitter.next(res.description);
+      return null;
+    }
+
+    return res.value as Admin.Transaction[];
   }
 }

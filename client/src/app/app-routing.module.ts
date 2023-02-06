@@ -11,6 +11,7 @@ import { PaymentComponent } from './main-page/payment/payment.component';
 import { atmRoutes } from './main-page/atm-simulator/atm-routing.module';
 import { AdminUsersComponent } from './main-page/admin/admin-users/admin-users.component';
 import { AdminAccountsComponent } from './main-page/admin/admin-accounts/admin-accounts.component';
+import { AdminTransactionsComponent } from './main-page/admin/admin-transactions/admin-transactions.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "login", pathMatch: "full" },
@@ -25,7 +26,8 @@ const routes: Routes = [
         path: "admin",
         children: [
           { path: "users", component: AdminUsersComponent },
-          { path: "accounts", component: AdminAccountsComponent }
+          { path: "accounts", component: AdminAccountsComponent },
+          { path: "transactions", component: AdminTransactionsComponent }
         ]
       }
     ]

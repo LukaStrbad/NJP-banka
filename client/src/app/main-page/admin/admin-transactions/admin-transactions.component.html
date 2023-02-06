@@ -1,0 +1,26 @@
+<div *ngIf="error" class="alert alert-danger">
+    {{error}}
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped text-center align-middle">
+        <thead>
+            <tr>
+                <th scope="col">Isplaćeno</th>
+                <th scope="col">Pošiljatelj</th>
+                <th scope="col">Uplaćeno</th>
+                <th scope="col">Primatelj</th>
+                <th scope="col">Vrijeme</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let transaction of transactions">
+                <td>{{transaction.sent | currency:transaction.sentCurrency}}</td>
+                <td>{{transaction.sender}}</td>
+                <td>{{transaction.received | currency:transaction.receivedCurrency}}</td>
+                <td>{{transaction.receiver}}</td>
+                <td>{{transaction.time_stamp | date:"dd.MM.yyyy. HH:mm"}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
