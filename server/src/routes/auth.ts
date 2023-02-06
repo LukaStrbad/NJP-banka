@@ -2,6 +2,8 @@ import express, { Response } from "express";
 import mysql from "promise-mysql";
 import md5 from "md5";
 import { ApiResponse, generateSignedToken, queryError, UserTokenInfo } from "../api-response";
+import { pbkdf2Sync } from "crypto"
+import { v4 as uuidv4 } from "uuid";
 
 export function getAuthRouter(pool: mysql.Pool) {
     return express.Router()
@@ -9,9 +11,9 @@ export function getAuthRouter(pool: mysql.Pool) {
             let conn = await pool.getConnection();
             try {
                 let email = req.body.email;
-                let password = md5(req.body.password);
 
                 let rows = await conn.query<any[]>("SELECT * FROM users WHERE email = ?;", email);
+                let password = pbkdf2Sync(req.body.password, rows[0].salt, 10_000, 64, "sha512").toString("hex");
 
                 if (rows.length === 0) {
                     res.json(<ApiResponse>{
@@ -54,11 +56,12 @@ export function getAuthRouter(pool: mysql.Pool) {
         .post("/register", async (req, res) => {
             let conn = await pool.getConnection();
             try {
+                let salt = uuidv4();
                 let email = req.body.email;
                 let firstName = req.body.firstName;
                 let lastName = req.body.lastName;
                 let dateOfBirth = req.body.dateOfBirth;
-                let password = md5(req.body.password);
+                let password = pbkdf2Sync(req.body.password, salt, 10_000, 64, "sha512").toString("hex")
 
                 if (email == undefined
                     || firstName == undefined
@@ -94,6 +97,7 @@ export function getAuthRouter(pool: mysql.Pool) {
                 }
 
                 const user = {
+                    salt: salt,
                     email: email,
                     firstName: firstName,
                     lastName: lastName,
@@ -106,7 +110,7 @@ export function getAuthRouter(pool: mysql.Pool) {
 
                 let userId = insert.insertId;
 
-                let newUser = await conn.query<UserTokenInfo[]>("SELECT email, firstName, lastName, isAdmin FROM users WHERE id = ?;", userId);
+                let newUser = await conn.query<UserTokenInfo[]>("SELECT id, email, firstName, lastName, isAdmin FROM users WHERE id = ?;", userId);
 
                 res.json(<ApiResponse>{
                     success: true,
@@ -121,5 +125,5 @@ export function getAuthRouter(pool: mysql.Pool) {
             finally {
                 conn.release();
             }
-        })
+        });
 }
