@@ -1,7 +1,7 @@
 import { ConnectionConfig } from "promise-mysql";
 
 export const config = {
-    port: process.env.port || 8081,
+    port: process.env.PORT || 8081,
     pool: <ConnectionConfig>{
         connectionLimit: 100,
         host: "localhost",
