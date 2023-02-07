@@ -2,3 +2,6 @@ node_modules
 .idea
 .vscode
 .angular
+dist
+server/build
+server/src/public
