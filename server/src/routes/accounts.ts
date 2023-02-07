@@ -19,8 +19,8 @@ function generateRandomIBAN(): string {
 }
 
 export async function getNextTransactionId(conn: mysql.Connection) {
-    let maxSendId = (await conn.query("SELECT MAX(id) AS id from sendTransactions"))[0].id as number;
-    let maxReceiveId = (await conn.query("SELECT MAX(id) AS id from receiveTransactions"))[0].id as number;
+    let maxSendId = ((await conn.query("SELECT MAX(id) AS id from sendTransactions"))[0].id ?? 0) as number;
+    let maxReceiveId = ((await conn.query("SELECT MAX(id) AS id from receiveTransactions"))[0].id ?? 0) as number;
 
     return Math.max(maxSendId, maxReceiveId) + 1;
 }
