@@ -36,7 +36,7 @@ export function getAtmRouter(pool: mysql.Pool) {
                     WHERE iban = ? AND userId = ?;`, [amount, iban, tokenInfo.id]);
 
                 let newId = await getNextTransactionId(conn);
-                let insert1 = await conn.query(`INSERT INTO sendTransactions (id, amount, iban, receiverIban, receivingCurrency) VALUES(?, ?, ?, NULL, ?);`,
+                let insert1 = await conn.query(`INSERT INTO sendtransactions (id, amount, iban, receiverIban, receivingCurrency) VALUES(?, ?, ?, NULL, ?);`,
                     [newId, amount, iban, accountBalance[0].currency]);
 
                 if (queryResult.affectedRows === 0) {
@@ -80,7 +80,7 @@ export function getAtmRouter(pool: mysql.Pool) {
                     WHERE iban = ? AND userId = ?;`, [amount, iban, tokenInfo.id]);
 
                 let newId = await getNextTransactionId(conn);
-                let insert1 = await conn.query(`INSERT INTO receiveTransactions (id,amount, iban, senderIban) VALUES(?, ?, ?, NULL);`,
+                let insert1 = await conn.query(`INSERT INTO receivetransactions (id,amount, iban, senderIban) VALUES(?, ?, ?, NULL);`,
                     [newId, amount, iban]);
 
                 if (queryResult.affectedRows === 0) {

@@ -20,7 +20,7 @@ CREATE TABLE accounts (
     currency CHAR(3) NOT NULL,
     FOREIGN KEY (userId) REFERENCES users (id)
 );
-CREATE TABLE sendTransactions (
+CREATE TABLE sendtransactions (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     amount DECIMAL(15, 2) NOT NULL,
     iban CHAR(21) NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE sendTransactions (
     FOREIGN KEY (iban) REFERENCES accounts (iban),
     FOREIGN KEY (receiverIban) REFERENCES accounts (iban)
 );
-CREATE TABLE receiveTransactions (
+CREATE TABLE receivetransactions (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     amount DECIMAL(15, 2) NOT NULL,
     iban CHAR(21) NOT NULL,

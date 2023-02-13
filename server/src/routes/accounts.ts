@@ -19,8 +19,8 @@ function generateRandomIBAN(): string {
 }
 
 export async function getNextTransactionId(conn: mysql.Connection) {
-    let maxSendId = ((await conn.query("SELECT MAX(id) AS id from sendTransactions"))[0].id ?? 0) as number;
-    let maxReceiveId = ((await conn.query("SELECT MAX(id) AS id from receiveTransactions"))[0].id ?? 0) as number;
+    let maxSendId = ((await conn.query("SELECT MAX(id) AS id from sendtransactions"))[0].id ?? 0) as number;
+    let maxReceiveId = ((await conn.query("SELECT MAX(id) AS id from receivetransactions"))[0].id ?? 0) as number;
 
     return Math.max(maxSendId, maxReceiveId) + 1;
 }
@@ -81,11 +81,11 @@ async function makeTransaction(
     let newId = await getNextTransactionId(conn);
 
     let update1 = await conn.query(`UPDATE accounts SET balance = balance - ? WHERE iban = ?;`, [amount, senderIban]);
-    let insert1 = await conn.query(`INSERT INTO sendTransactions (id, amount, iban, receiverIban, receivingCurrency, exchangeRate) VALUES(?, ?, ?, ?, ?, ?);`,
+    let insert1 = await conn.query(`INSERT INTO sendtransactions (id, amount, iban, receiverIban, receivingCurrency, exchangeRate) VALUES(?, ?, ?, ?, ?, ?);`,
         [newId, amount, senderIban, receiverIban, receivingCurrency, exchangeRate]);
 
     let update2 = await conn.query(`UPDATE accounts SET balance = balance + ? WHERE iban = ?;`, [amount * exchangeRate, receiverIban]);
-    let insert2 = await conn.query(`INSERT INTO receiveTransactions (id, amount, iban, senderIban) VALUES(?, ?, ?, ?);`,
+    let insert2 = await conn.query(`INSERT INTO receivetransactions (id, amount, iban, senderIban) VALUES(?, ?, ?, ?);`,
         [newId, amount * exchangeRate, receiverIban, senderIban]);
 
     return {
@@ -181,12 +181,12 @@ export function getAccountsRouter(pool: mysql.Pool) {
                 let account = accounts[0];
                 let sendingTransactions = await conn.query(
                     `SELECT IFNULL(receiverIban, 'ATM') as iban, amount, exchangeRate,
-                        time_stamp, receivingCurrency FROM sendTransactions
+                        time_stamp, receivingCurrency FROM sendtransactions
                         WHERE iban = ?;`, iban);
 
                 let receivingTransactions = await conn.query(
                     `SELECT IFNULL(senderIban, 'ATM') as iban, amount, time_stamp
-                    FROM receiveTransactions
+                    FROM receivetransactions
                     WHERE iban = ?;`, iban);
 
                 account.sendingTransactions = sendingTransactions;

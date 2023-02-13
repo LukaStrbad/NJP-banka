@@ -92,10 +92,10 @@ export function getAdminRouter(pool: mysql.Pool) {
                         CONCAT(sUser.firstName, ' ', sUser.lastName, ' (', s.iban, ')') AS sender,
                         CONCAT(rUser.firstName, ' ', rUser.lastName, ' (', r.iban, ')') AS receiver,
                         s.time_stamp
-                    FROM sendTransactions s 
+                    FROM sendtransactions s 
                     INNER JOIN accounts sAcc ON s.iban = sAcc.iban
                     INNER JOIN users sUser ON sAcc.userId = sUser.id
-                    INNER JOIN receiveTransactions r ON s.id = r.id
+                    INNER JOIN receivetransactions r ON s.id = r.id
                     INNER JOIN accounts rAcc ON r.iban = rAcc.iban
                     INNER JOIN users rUser ON rAcc.userId = rUser.id
                     UNION ALL
@@ -103,7 +103,7 @@ export function getAdminRouter(pool: mysql.Pool) {
                         amount AS received, a.currency AS receivedCurrency,
                         NULL AS sender, CONCAT(users.firstName, ' ', users.lastName, ' (', a.iban, ')') AS receiver,
                         time_stamp
-                    FROM receiveTransactions r 
+                    FROM receivetransactions r 
                     INNER JOIN accounts a ON r.iban = a.iban
                     INNER JOIN users ON a.userId = users.id
                     WHERE senderIban IS NULL
@@ -112,7 +112,7 @@ export function getAdminRouter(pool: mysql.Pool) {
                         NULL AS received, NULL AS receivedCurrency,
                         CONCAT(users.firstName, ' ', users.lastName, ' (', a.iban, ')') AS sender, NULL AS receiver,
                         time_stamp
-                    FROM sendTransactions r 
+                    FROM sendtransactions r 
                     INNER JOIN accounts a ON r.iban = a.iban
                     INNER JOIN users ON a.userId = users.id
                     WHERE receiverIban IS NULL
