@@ -31,8 +31,6 @@ export class AccountOverviewComponent implements OnInit {
 
   async init() {
     let accountInfo = await this.accountsService.getAccountInfo(this.iban);
-
-    console.log(accountInfo);
     
     if (accountInfo != null) {
       this.accountInfo = accountInfo;

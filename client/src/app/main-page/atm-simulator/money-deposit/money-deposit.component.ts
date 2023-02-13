@@ -49,8 +49,6 @@ export class MoneyDepositComponent implements OnInit {
       sum += el.denomination * el.amount
     });
 
-    console.log(sum);
-
     let res = await this.atmService.depositMoney(this.account.iban, sum);
 
     this.account = null;
